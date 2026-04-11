@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=108499426', 'ym');
+
+    ym(108499426, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/108499426" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор статей — Яндекс.Дзен</title>
+    <style>
+        /* ── Reset & Base ── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                         "Helvetica Neue", Arial, sans-serif;
+            background: #f0f2f5;
+            color: #1a1a2e;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ── Header ── */
+        header {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            text-align: center;
+            padding: 2rem 1rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,.15);
+        }
+        header h1 { font-size: 1.8rem; font-weight: 700; }
+        header p  { margin-top: .4rem; opacity: .85; font-size: .95rem; }
+
+        /* ── Main container ── */
+        .container {
+            width: 100%;
+            max-width: 720px;
+            padding: 1.5rem 1rem;
+        }
+
+        /* ── Card ── */
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 1px 6px rgba(0,0,0,.08);
+            padding: 1.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        /* ── Form ── */
+        .form-group { margin-bottom: 1rem; }
+        .form-group label {
+            display: block;
+            margin-bottom: .4rem;
+            font-weight: 600;
+            font-size: .9rem;
+            color: #444;
+        }
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: .65rem .8rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color .2s;
+        }
+        .form-group input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .hint { font-size: .8rem; color: #888; margin-top: .25rem; }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: .4rem;
+            width: 100%;
+            padding: .75rem 1rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity .2s, transform .1s;
+        }
+        .btn:hover { opacity: .9; }
+        .btn:active { transform: scale(.98); }
+        .btn:disabled { opacity: .5; cursor: not-allowed; }
+
+        /* ── Logs ── */
+        #logs-container {
+            max-height: 320px;
+            overflow-y: auto;
+            background: #1e1e2e;
+            color: #cdd6f4;
+            font-family: "Cascadia Code", "Fira Code", "Consolas", monospace;
+            font-size: .82rem;
+            line-height: 1.6;
+            padding: 1rem;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        #logs-container .log-line { margin-bottom: 2px; }
+        #logs-container .log-error { color: #f38ba8; }
+        #logs-container .log-success { color: #a6e3a1; }
+
+        /* ── Result ── */
+        #result-section { display: none; }
+        .result-meta { margin-bottom: .8rem; }
+        .result-meta h3 { font-size: 1.1rem; color: #333; }
+        .result-meta p  { font-size: .85rem; color: #666; margin-top: .2rem; }
+
+        .article-preview {
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 1rem;
+            max-height: 500px;
+            overflow-y: auto;
+            font-size: .9rem;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .download-link {
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            margin-top: .8rem;
+            padding: .5rem 1rem;
+            background: #10b981;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: .9rem;
+            transition: background .2s;
+        }
+        .download-link:hover { background: #059669; }
+
+        /* ── Spinner ── */
+        .spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin .6s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── Status badge ── */
+        .badge {
+            display: inline-block;
+            padding: .2rem .6rem;
+            border-radius: 999px;
+            font-size: .75rem;
+            font-weight: 600;
+        }
+        .badge-running { background: #fef3c7; color: #92400e; }
+        .badge-done   { background: #d1fae5; color: #065f46; }
+        .badge-error  { background: #fee2e2; color: #991b1b; }
+
+        /* ── Responsive ── */
+        @media (max-width: 480px) {
+            header h1 { font-size: 1.3rem; }
+            .card { padding: 1rem; }
+            #logs-container { max-height: 220px; font-size: .75rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>📝 Генератор статей</h1>
+    <p>Создание статей для Яндекс.Дзен с помощью ИИ</p>
+</header>
+
+<div class="container">
+
+    <!-- ── Form card ── -->
+    <div class="card">
+        <form id="generate-form">
+            <div class="form-group">
+                <label for="topic-input">Тема статьи <span style="color:#aaa">(необязательно)</span></label>
+                <input type="text" id="topic-input" name="topic"
+                       placeholder="Например: Как справиться с тревогой"
+                       autocomplete="off">
+                <div class="hint">Оставьте пустым — тема будет подобрана автоматически из трендов</div>
+            </div>
+            <button type="submit" class="btn" id="submit-btn">
+                <span id="btn-text">Сгенерировать</span>
+                <span id="btn-spinner" class="spinner" style="display:none"></span>
+            </button>
+        </form>
+    </div>
+
+    <!-- ── Logs card ── -->
+    <div class="card" id="logs-card" style="display:none">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem">
+            <h3 style="font-size:1rem">📋 Процесс генерации</h3>
+            <span id="status-badge" class="badge badge-running">Выполняется…</span>
+        </div>
+        <div id="logs-container"></div>
+    </div>
+
+    <!-- ── Result card ── -->
+    <div class="card" id="result-section">
+        <div class="result-meta">
+            <h3 id="result-topic"></h3>
+            <p id="result-filename"></p>
+        </div>
+        <div class="article-preview" id="article-preview"></div>
+        <a id="download-link" class="download-link" href="#" download>
+            ⬇ Скачать статью (.md)
+        </a>
+    </div>
+
+</div>
+
+<script>
+(function () {
+    const form        = document.getElementById('generate-form');
+    const topicInput  = document.getElementById('topic-input');
+    const submitBtn   = document.getElementById('submit-btn');
+    const btnText     = document.getElementById('btn-text');
+    const btnSpinner  = document.getElementById('btn-spinner');
+    const logsCard    = document.getElementById('logs-card');
+    const logsContainer = document.getElementById('logs-container');
+    const statusBadge = document.getElementById('status-badge');
+    const resultSection = document.getElementById('result-section');
+    const resultTopic  = document.getElementById('result-topic');
+    const resultFilename = document.getElementById('result-filename');
+    const articlePreview = document.getElementById('article-preview');
+    const downloadLink = document.getElementById('download-link');
+
+    let currentEventSource = null;
+
+    function setBusy(busy) {
+        submitBtn.disabled = busy;
+        btnText.textContent = busy ? 'Генерация…' : 'Сгенерировать';
+        btnSpinner.style.display = busy ? 'inline-block' : 'none';
+    }
+
+    function closeSSE() {
+        if (currentEventSource) {
+            currentEventSource.close();
+            currentEventSource = null;
+        }
+    }
+
+    function appendLog(text) {
+        const isError = text.includes('ERROR');
+        const div = document.createElement('div');
+        div.className = 'log-line' + (isError ? ' log-error' : '');
+        div.textContent = text;
+        logsContainer.appendChild(div);
+        logsContainer.scrollTop = logsContainer.scrollHeight;
+    }
+
+    form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        closeSSE();
+
+        const topic = topicInput.value.trim();
+
+        // Reset UI
+        logsContainer.innerHTML = '';
+        resultSection.style.display = 'none';
+        logsCard.style.display = 'block';
+        statusBadge.className = 'badge badge-running';
+        statusBadge.textContent = 'Выполняется…';
+        setBusy(true);
+
+        try {
+            const resp = await fetch('/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ topic: topic }),
+            });
+            const data = await resp.json();
+            const jobId = data.job_id;
+
+            // Open SSE stream
+            currentEventSource = new EventSource('/stream/' + jobId);
+
+            currentEventSource.onmessage = function (e) {
+                const msg = e.data;
+                if (msg.startsWith('__STATUS__:')) {
+                    const status = msg.replace('__STATUS__:', '');
+                    if (status === 'done') {
+                        statusBadge.className = 'badge badge-done';
+                        statusBadge.textContent = 'Готово ✓';
+                        appendLog('✅ Генерация завершена!');
+                        // Load result
+                        loadResult(jobId);
+                    } else if (status === 'error') {
+                        statusBadge.className = 'badge badge-error';
+                        statusBadge.textContent = 'Ошибка ✗';
+                        appendLog('❌ Произошла ошибка при генерации.');
+                        setBusy(false);
+                    }
+                    closeSSE();
+                } else {
+                    appendLog(msg);
+                }
+            };
+
+            currentEventSource.onerror = function () {
+                closeSSE();
+                // Fallback: poll status once
+                pollStatus(jobId);
+            };
+
+        } catch (err) {
+            appendLog('ERROR: ' + err.message);
+            statusBadge.className = 'badge badge-error';
+            statusBadge.textContent = 'Ошибка ✗';
+            setBusy(false);
+        }
+    });
+
+    async function pollStatus(jobId) {
+        try {
+            const resp = await fetch('/status/' + jobId);
+            const data = await resp.json();
+            // Show remaining logs
+            const existingCount = logsContainer.children.length;
+            data.logs.slice(existingCount).forEach(l => appendLog(l));
+
+            if (data.status === 'done') {
+                statusBadge.className = 'badge badge-done';
+                statusBadge.textContent = 'Готово ✓';
+                loadResultFromData(data.result);
+            } else if (data.status === 'error') {
+                statusBadge.className = 'badge badge-error';
+                statusBadge.textContent = 'Ошибка ✗';
+            }
+            setBusy(false);
+        } catch (_) {
+            setBusy(false);
+        }
+    }
+
+    async function loadResult(jobId) {
+        try {
+            const resp = await fetch('/status/' + jobId);
+            const data = await resp.json();
+            if (data.result) {
+                loadResultFromData(data.result);
+            }
+        } catch (_) {}
+        setBusy(false);
+    }
+
+    function loadResultFromData(result) {
+        if (!result) return;
+        resultSection.style.display = 'block';
+        resultTopic.textContent = result.topic;
+        resultFilename.textContent = 'Файл: ' + result.filename;
+        articlePreview.textContent = result.article;
+
+        // Download link — создаём blob для скачивания
+        const blob = new Blob([result.article], { type: 'text/markdown;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        downloadLink.href = url;
+        downloadLink.download = result.filename;
+
+        // Прокрутка к результату
+        resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+})();
+</script>
+
+</body>
+</html>
