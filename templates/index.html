@@ -127,34 +127,52 @@
         .result-meta h3 { font-size: 1.1rem; color: #333; }
         .result-meta p  { font-size: .85rem; color: #666; margin-top: .2rem; }
 
-        .article-preview {
-            background: #fafafa;
+        #article-editor {
+            width: 100%;
+            min-height: 400px;
+            padding: 1rem;
             border: 1px solid #e0e0e0;
             border-radius: 8px;
-            padding: 1rem;
-            max-height: 500px;
-            overflow-y: auto;
+            font-family: "Cascadia Code", "Fira Code", "Consolas", monospace;
             font-size: .9rem;
             line-height: 1.7;
+            resize: vertical;
+            background: #fafafa;
+            color: #1a1a2e;
             white-space: pre-wrap;
             word-break: break-word;
         }
+        #article-editor:focus {
+            outline: none;
+            border-color: #667eea;
+            background: #fff;
+        }
 
-        .download-link {
+        /* ── Action buttons row ── */
+        .action-buttons {
+            display: flex;
+            gap: .6rem;
+            margin-top: .8rem;
+            flex-wrap: wrap;
+        }
+        .action-btn {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: .4rem;
-            margin-top: .8rem;
-            padding: .5rem 1rem;
-            background: #10b981;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: 600;
+            padding: .6rem 1.2rem;
+            border: none;
+            border-radius: 8px;
             font-size: .9rem;
-            transition: background .2s;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity .2s, transform .1s;
+            color: #fff;
         }
-        .download-link:hover { background: #059669; }
+        .action-btn:hover { opacity: .9; }
+        .action-btn:active { transform: scale(.97); }
+        .btn-copy    { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .btn-download { background: linear-gradient(135deg, #10b981, #059669); }
 
         /* ── Spinner ── */
         .spinner {
@@ -229,10 +247,11 @@
             <h3 id="result-topic"></h3>
             <p id="result-filename"></p>
         </div>
-        <div class="article-preview" id="article-preview"></div>
-        <a id="download-link" class="download-link" href="#" download>
-            ⬇ Скачать статью (.md)
-        </a>
+        <textarea id="article-editor" spellcheck="false"></textarea>
+        <div class="action-buttons">
+            <button class="action-btn btn-copy" id="copy-btn">📋 Скопировать</button>
+            <button class="action-btn btn-download" id="download-btn">⬇ Скачать (.md)</button>
+        </div>
     </div>
 
 </div>
@@ -250,10 +269,12 @@
     const resultSection = document.getElementById('result-section');
     const resultTopic  = document.getElementById('result-topic');
     const resultFilename = document.getElementById('result-filename');
-    const articlePreview = document.getElementById('article-preview');
-    const downloadLink = document.getElementById('download-link');
+    const articleEditor = document.getElementById('article-editor');
+    const copyBtn = document.getElementById('copy-btn');
+    const downloadBtn = document.getElementById('download-btn');
 
     let currentEventSource = null;
+    let currentArticleFilename = '';
 
     function setBusy(busy) {
         submitBtn.disabled = busy;
@@ -377,17 +398,39 @@
         resultSection.style.display = 'block';
         resultTopic.textContent = result.topic;
         resultFilename.textContent = 'Файл: ' + result.filename;
-        articlePreview.textContent = result.article;
-
-        // Download link — создаём blob для скачивания
-        const blob = new Blob([result.article], { type: 'text/markdown;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
-        downloadLink.href = url;
-        downloadLink.download = result.filename;
+        articleEditor.value = result.article;
+        currentArticleFilename = result.filename || 'article.md';
 
         // Прокрутка к результату
         resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+
+    // ── Copy button ──
+    copyBtn.addEventListener('click', async function () {
+        const text = articleEditor.value;
+        try {
+            await navigator.clipboard.writeText(text);
+            copyBtn.textContent = '✅ Скопировано!';
+            setTimeout(function () { copyBtn.textContent = '📋 Скопировать'; }, 2000);
+        } catch (err) {
+            copyBtn.textContent = '❌ Ошибка';
+            setTimeout(function () { copyBtn.textContent = '📋 Скопировать'; }, 2000);
+        }
+    });
+
+    // ── Download button ──
+    downloadBtn.addEventListener('click', function () {
+        const text = articleEditor.value;
+        const blob = new Blob([text], { type: 'text/markdown;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = currentArticleFilename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    });
 })();
 </script>
 
