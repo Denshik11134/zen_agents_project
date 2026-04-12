@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Контакты — neirostat.ru{% endblock %}
+
+{% block content %}
+<div class="content-page">
+    <div class="content-card">
+        <h1>Контакты</h1>
+
+        <p>Если у вас есть вопросы, предложения или вы хотите сообщить о проблеме, свяжитесь с нами любым из способов ниже.</p>
+
+        <h2>Электронная почта</h2>
+        <p>Напишите нам: <a href="mailto:support@neirostat.ru">support@neirostat.ru</a></p>
+
+        <h2>GitHub</h2>
+        <p>Создайте Issue или Discussion в репозитории проекта: <a href="https://github.com" target="_blank" rel="noopener noreferrer">GitHub Repository</a></p>
+
+        <h2>Обратная связь</h2>
+        <p>Мы ценим ваши отзывы и предложения. Если вы заметили ошибку в работе сервиса или хотите предложить новую функцию — не стесняйтесь обращаться.</p>
+
+        <h2>Время ответа</h2>
+        <p>Мы стараемся отвечать на обращения в течение 1–2 рабочих дней.</p>
+
+        <a href="{{ url_for('index') }}" class="back-link">← На главную</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,6 +1,8 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
+{% extends "base.html" %}
+
+{% block title %}Генератор статей — Яндекс.Дзен{% endblock %}
+
+{% block extra_head %}
 <!-- Yandex.RTB -->
 <script>window.yaContextCb=window.yaContextCb||[]</script>
 <script src="https://yandex.ru/ads/system/context.js" async></script>
@@ -18,264 +20,69 @@
 </script>
 <noscript><div><img src="https://mc.yandex.ru/watch/108499426" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Генератор статей — Яндекс.Дзен</title>
-    <style>
-        /* ── Reset & Base ── */
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+{% endblock %}
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-                         "Helvetica Neue", Arial, sans-serif;
-            background: #f0f2f5;
-            color: #1a1a2e;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* ── Header ── */
-        header {
-            width: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
-            text-align: center;
-            padding: 2rem 1rem;
-            box-shadow: 0 2px 12px rgba(0,0,0,.15);
-        }
-        header h1 { font-size: 1.8rem; font-weight: 700; }
-        header p  { margin-top: .4rem; opacity: .85; font-size: .95rem; }
-
-        /* ── Main container ── */
-        .container {
-            width: 100%;
-            max-width: 720px;
-            padding: 1.5rem 1rem;
-        }
-
-        /* ── Card ── */
-        .card {
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 1px 6px rgba(0,0,0,.08);
-            padding: 1.5rem;
-            margin-bottom: 1.2rem;
-        }
-
-        /* ── Form ── */
-        .form-group { margin-bottom: 1rem; }
-        .form-group label {
-            display: block;
-            margin-bottom: .4rem;
-            font-weight: 600;
-            font-size: .9rem;
-            color: #444;
-        }
-        .form-group input[type="text"] {
-            width: 100%;
-            padding: .65rem .8rem;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color .2s;
-        }
-        .form-group input[type="text"]:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        .hint { font-size: .8rem; color: #888; margin-top: .25rem; }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: .4rem;
-            width: 100%;
-            padding: .75rem 1rem;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: opacity .2s, transform .1s;
-        }
-        .btn:hover { opacity: .9; }
-        .btn:active { transform: scale(.98); }
-        .btn:disabled { opacity: .5; cursor: not-allowed; }
-
-        /* ── Logs ── */
-        #logs-container {
-            max-height: 320px;
-            overflow-y: auto;
-            background: #1e1e2e;
-            color: #cdd6f4;
-            font-family: "Cascadia Code", "Fira Code", "Consolas", monospace;
-            font-size: .82rem;
-            line-height: 1.6;
-            padding: 1rem;
-            border-radius: 8px;
-            white-space: pre-wrap;
-            word-break: break-word;
-        }
-        #logs-container .log-line { margin-bottom: 2px; }
-        #logs-container .log-error { color: #f38ba8; }
-        #logs-container .log-success { color: #a6e3a1; }
-
-        /* ── Result ── */
-        #result-section { display: none; }
-        .result-meta { margin-bottom: .8rem; }
-        .result-meta h3 { font-size: 1.1rem; color: #333; }
-        .result-meta p  { font-size: .85rem; color: #666; margin-top: .2rem; }
-
-        #article-editor {
-            width: 100%;
-            min-height: 400px;
-            padding: 1rem;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            font-family: "Cascadia Code", "Fira Code", "Consolas", monospace;
-            font-size: .9rem;
-            line-height: 1.7;
-            resize: vertical;
-            background: #fafafa;
-            color: #1a1a2e;
-            white-space: pre-wrap;
-            word-break: break-word;
-        }
-        #article-editor:focus {
-            outline: none;
-            border-color: #667eea;
-            background: #fff;
-        }
-
-        /* ── Action buttons row ── */
-        .action-buttons {
-            display: flex;
-            gap: .6rem;
-            margin-top: .8rem;
-            flex-wrap: wrap;
-        }
-        .action-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: .4rem;
-            padding: .6rem 1.2rem;
-            border: none;
-            border-radius: 8px;
-            font-size: .9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: opacity .2s, transform .1s;
-            color: #fff;
-        }
-        .action-btn:hover { opacity: .9; }
-        .action-btn:active { transform: scale(.97); }
-        .btn-copy    { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-        .btn-download { background: linear-gradient(135deg, #10b981, #059669); }
-
-        /* ── Spinner ── */
-        .spinner {
-            display: inline-block;
-            width: 18px;
-            height: 18px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-top-color: #fff;
-            border-radius: 50%;
-            animation: spin .6s linear infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* ── Status badge ── */
-        .badge {
-            display: inline-block;
-            padding: .2rem .6rem;
-            border-radius: 999px;
-            font-size: .75rem;
-            font-weight: 600;
-        }
-        .badge-running { background: #fef3c7; color: #92400e; }
-        .badge-done   { background: #d1fae5; color: #065f46; }
-        .badge-error  { background: #fee2e2; color: #991b1b; }
-
-        /* ── Responsive ── */
-        @media (max-width: 480px) {
-            header h1 { font-size: 1.3rem; }
-            .card { padding: 1rem; }
-            #logs-container { max-height: 220px; font-size: .75rem; }
-        }
-    </style>
-</head>
-<body>
-
-<header>
-    <h1>📝 Генератор статей</h1>
-    <p>Создание статей для Яндекс.Дзен с помощью ИИ</p>
-</header>
-
-<div class="container">
+{% block content %}
+<div class="main-container">
 
     <!-- ── Form card ── -->
     <div class="card">
         <form id="generate-form">
             <div class="form-group">
-                <label for="topic-input">Тема статьи <span style="color:#aaa">(необязательно)</span></label>
+                <label for="topic-input">Тема статьи <span style="color:var(--color-text-muted); font-weight:400;">(необязательно)</span></label>
                 <input type="text" id="topic-input" name="topic"
-                       placeholder="Например: Как справиться с тревогой"
+                       placeholder="Введите тему (или оставьте пустым для случайной)"
                        autocomplete="off">
                 <div class="hint">Оставьте пустым — тема будет подобрана автоматически из трендов</div>
             </div>
-            <button type="submit" class="btn" id="submit-btn">
-                <span id="btn-text">Сгенерировать</span>
+            <button type="submit" class="btn-primary" id="submit-btn">
+                <span id="btn-text">Сгенерировать статью</span>
                 <span id="btn-spinner" class="spinner" style="display:none"></span>
             </button>
         </form>
     </div>
 
     <!-- ── Yandex.RSA Ad Block ── -->
-    <div class="card" style="padding: 1rem;">
-        <div style="margin: 20px 0; text-align: center;">
-            <!-- Yandex.RTB R-A-19093580-1 -->
-            <div id="yandex_rtb_R-A-19093580-1"></div>
-            <script>
-            window.yaContextCb.push(() => {
-                Ya.Context.AdvManager.render({
-                    "blockId": "R-A-19093580-1",
-                    "renderTo": "yandex_rtb_R-A-19093580-1"
-                })
+    <div class="ad-block">
+        <!-- Yandex.RTB R-A-19093580-1 -->
+        <div id="yandex_rtb_R-A-19093580-1"></div>
+        <script>
+        window.yaContextCb.push(() => {
+            Ya.Context.AdvManager.render({
+                "blockId": "R-A-19093580-1",
+                "renderTo": "yandex_rtb_R-A-19093580-1"
             })
-            </script>
-        </div>
+        })
+        </script>
+        <!-- Место для рекламы РСЯ -->
     </div>
 
     <!-- ── Logs card ── -->
-    <div class="card" id="logs-card" style="display:none">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem">
-            <h3 style="font-size:1rem">📋 Процесс генерации</h3>
+    <div class="card logs-card" id="logs-card">
+        <div class="logs-header">
+            <h3>📋 Процесс генерации</h3>
             <span id="status-badge" class="badge badge-running">Выполняется…</span>
         </div>
         <div id="logs-container"></div>
     </div>
 
     <!-- ── Result card ── -->
-    <div class="card" id="result-section">
+    <div class="card result-section" id="result-section">
         <div class="result-meta">
             <h3 id="result-topic"></h3>
             <p id="result-filename"></p>
         </div>
         <textarea id="article-editor" spellcheck="false"></textarea>
         <div class="action-buttons">
-            <button class="action-btn btn-copy" id="copy-btn">📋 Скопировать</button>
-            <button class="action-btn btn-download" id="download-btn">⬇ Скачать (.md)</button>
+            <button class="btn-secondary btn-copy" id="copy-btn">📋 Скопировать</button>
+            <button class="btn-secondary btn-download" id="download-btn">⬇ Скачать (.md)</button>
         </div>
     </div>
 
 </div>
+{% endblock %}
 
+{% block extra_scripts %}
 <script>
 (function () {
     const form        = document.getElementById('generate-form');
@@ -298,7 +105,7 @@
 
     function setBusy(busy) {
         submitBtn.disabled = busy;
-        btnText.textContent = busy ? 'Генерация…' : 'Сгенерировать';
+        btnText.textContent = busy ? 'Генерация…' : 'Сгенерировать статью';
         btnSpinner.style.display = busy ? 'inline-block' : 'none';
     }
 
@@ -453,6 +260,4 @@
     });
 })();
 </script>
-
-</body>
-</html>
+{% endblock %}
