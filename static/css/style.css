@@ -683,3 +683,9 @@ img {
     font-size: 12pt;
   }
 }
+/* Центрирование основного контента */
+.main-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
