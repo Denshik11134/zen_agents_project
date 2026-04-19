@@ -45,14 +45,11 @@ def _generate_article_job(job_id: str, user_topic: str | None) -> None:
             topic = user_topic.strip()
             _log(job_id, f"Используем указанную тему: {topic}")
         else:
-            _log(job_id, "Тема не указана — подбираем из трендов...")
-            topics = get_random_psychology_topics(1)
-            if not topics:
-                _log(job_id, "ERROR: Не удалось подобрать тему из трендов.")
-                _generation_status[job_id] = "error"
-                return
-            topic = topics[0]
-            _log(job_id, f"Подобрана тема: {topic}")
+            _log(job_id, "Ошибка: тема не указана. Пожалуйста, введите тему статьи.")
+            _generation_status[job_id] = "error"
+            return
+
+        # ... здесь продолжается остальной код генерации (без изменений) ...
 
         # 2. Генерируем статью через GitHub Models (GPT-4o-mini)
         _log(job_id, "Генерация статьи через GitHub Models (GPT-4o-mini)...")
