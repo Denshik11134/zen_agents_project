@@ -9,10 +9,10 @@
 <div class="card">
     <form id="generate-form">
         <div class="form-group">
-            <label for="topic-input">Тема статьи <span style="color:var(--color-text-muted); font-weight:400;">(необязательно)</span></label>
+            <label for="topic-input">Тема статьи <span style="color:var(--color-text-muted); font-weight:400;">(обязательно)</span></label>
             <input type="text" id="topic-input" name="topic"
-                   placeholder="Введите тему (или оставьте пустым для случайной)"
-                   autocomplete="off">
+                   placeholder="Введите тему статьи"
+                   autocomplete="off" required>
             <div class="hint">Пожалуйста, введите тему статьи</div>
         </div>
 
@@ -24,6 +24,16 @@
                 <option value="twitter_thread">🐦 Тред для X (Twitter)</option>
                 <option value="video_script">🎬 Сценарий для видео (YouTube, TikTok)</option>
                 <option value="ad_post">💰 Рекламный пост (продающий)</option>
+            </select>
+        </div>
+
+        <div class="form-group" id="style-group" style="display:none;">
+            <label for="style-select">Стиль / Тон:</label>
+            <select id="style-select" class="form-control">
+                <option value="neutral">📰 Нейтральный / Информационный</option>
+                <option value="expert">🧠 Экспертный / Профессиональный</option>
+                <option value="friendly">💬 Разговорный / Дружеский</option>
+                <option value="emotional">🔥 Эмоциональный / Вдохновляющий</option>
             </select>
         </div>
 
@@ -77,27 +87,41 @@
 {% block extra_scripts %}
 <script>
 (function () {
-    const form        = document.getElementById('generate-form');
-    const topicInput  = document.getElementById('topic-input');
-    const submitBtn   = document.getElementById('submit-btn');
-    const btnText     = document.getElementById('btn-text');
-    const btnSpinner  = document.getElementById('btn-spinner');
-    const logsCard    = document.getElementById('logs-card');
+    const form = document.getElementById('generate-form');
+    const topicInput = document.getElementById('topic-input');
+    const submitBtn = document.getElementById('submit-btn');
+    const btnText = document.getElementById('btn-text');
+    const btnSpinner = document.getElementById('btn-spinner');
+    const logsCard = document.getElementById('logs-card');
     const logsContainer = document.getElementById('logs-container');
     const statusBadge = document.getElementById('status-badge');
     const resultSection = document.getElementById('result-section');
-    const resultTopic  = document.getElementById('result-topic');
+    const resultTopic = document.getElementById('result-topic');
     const resultFilename = document.getElementById('result-filename');
     const articleEditor = document.getElementById('article-editor');
     const copyBtn = document.getElementById('copy-btn');
     const downloadBtn = document.getElementById('download-btn');
+    const formatSelect = document.getElementById('format-select');
+    const styleGroup = document.getElementById('style-group');
 
     let currentEventSource = null;
     let currentArticleFilename = '';
 
+    function toggleStyleGroup() {
+        const format = formatSelect.value;
+        const showForFormats = ['social_post', 'ad_post', 'video_script'];
+        if (showForFormats.includes(format)) {
+            styleGroup.style.display = 'block';
+        } else {
+            styleGroup.style.display = 'none';
+        }
+    }
+    formatSelect.addEventListener('change', toggleStyleGroup);
+    toggleStyleGroup();
+
     function setBusy(busy) {
         submitBtn.disabled = busy;
-        btnText.textContent = busy ? 'Генерация…' : 'Сгенерировать статью';
+        btnText.textContent = busy ? 'Генерация…' : 'Сгенерировать';
         btnSpinner.style.display = busy ? 'inline-block' : 'none';
     }
 
@@ -118,27 +142,22 @@
     }
 
     form.addEventListener('submit', async function (e) {
-    e.preventDefault();
-    closeSSE();
+        e.preventDefault();
+        closeSSE();
 
-    const topic = topicInput.value.trim();
-    
-    // ПРОВЕРКА: если тема не введена
-    if (!topic) {
-        appendLog("❌ Ошибка: введите тему статьи");
-        statusBadge.className = 'badge badge-error';
-        statusBadge.textContent = 'Ошибка ✗';
-        logsCard.style.display = 'block';
-        setBusy(false);
-        return;
-    }
+        const topic = topicInput.value.trim();
+        if (!topic) {
+            appendLog("❌ Ошибка: введите тему статьи");
+            statusBadge.className = 'badge badge-error';
+            statusBadge.textContent = 'Ошибка ✗';
+            logsCard.style.display = 'block';
+            setBusy(false);
+            return;
+        }
 
-    const format = document.getElementById('format-select').value;
+        const format = formatSelect.value;
+        const style = styleGroup.style.display !== 'none' ? document.getElementById('style-select').value : 'neutral';
 
-    // ... остальной код (очистка логов, отправка запроса и т.д.)
-});
-
-        // Reset UI
         logsContainer.innerHTML = '';
         resultSection.style.display = 'none';
         logsCard.style.display = 'block';
@@ -150,14 +169,16 @@
             const resp = await fetch('/generate', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ topic: topic }),
+                body: JSON.stringify({ 
+    topic: topic, 
+    format: format,
+    style: style
+})
             });
             const data = await resp.json();
             const jobId = data.job_id;
 
-            // Open SSE stream
             currentEventSource = new EventSource('/stream/' + jobId);
-
             currentEventSource.onmessage = function (e) {
                 const msg = e.data;
                 if (msg.startsWith('__STATUS__:')) {
@@ -166,7 +187,6 @@
                         statusBadge.className = 'badge badge-done';
                         statusBadge.textContent = 'Готово ✓';
                         appendLog('✅ Генерация завершена!');
-                        // Load result
                         loadResult(jobId);
                     } else if (status === 'error') {
                         statusBadge.className = 'badge badge-error';
@@ -179,13 +199,10 @@
                     appendLog(msg);
                 }
             };
-
             currentEventSource.onerror = function () {
                 closeSSE();
-                // Fallback: poll status once
                 pollStatus(jobId);
             };
-
         } catch (err) {
             appendLog('ERROR: ' + err.message);
             statusBadge.className = 'badge badge-error';
@@ -198,10 +215,8 @@
         try {
             const resp = await fetch('/status/' + jobId);
             const data = await resp.json();
-            // Show remaining logs
             const existingCount = logsContainer.children.length;
             data.logs.slice(existingCount).forEach(l => appendLog(l));
-
             if (data.status === 'done') {
                 statusBadge.className = 'badge badge-done';
                 statusBadge.textContent = 'Готово ✓';
@@ -234,25 +249,21 @@
         resultFilename.textContent = 'Файл: ' + result.filename;
         articleEditor.value = result.article;
         currentArticleFilename = result.filename || 'article.md';
-
-        // Прокрутка к результату
         resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    // ── Copy button ──
     copyBtn.addEventListener('click', async function () {
         const text = articleEditor.value;
         try {
             await navigator.clipboard.writeText(text);
             copyBtn.textContent = '✅ Скопировано!';
-            setTimeout(function () { copyBtn.textContent = '📋 Скопировать'; }, 2000);
+            setTimeout(() => { copyBtn.textContent = '📋 Скопировать'; }, 2000);
         } catch (err) {
             copyBtn.textContent = '❌ Ошибка';
-            setTimeout(function () { copyBtn.textContent = '📋 Скопировать'; }, 2000);
+            setTimeout(() => { copyBtn.textContent = '📋 Скопировать'; }, 2000);
         }
     });
 
-    // ── Download button ──
     downloadBtn.addEventListener('click', function () {
         const text = articleEditor.value;
         const blob = new Blob([text], { type: 'text/markdown;charset=utf-8' });

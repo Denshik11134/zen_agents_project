@@ -1,43 +1,4 @@
-"""
-web_app.py — Flask web-интерфейс для генерации статей.
-
-Запуск: python web_app.py (порт 5000)
-"""
-
-import os
-import sys
-import threading
-import time
-from datetime import datetime
-from pathlib import Path
-
-from flask import Flask, render_template, request, jsonify, Response
-
-# Добавляем корень проекта в sys.path
-PROJECT_DIR = Path(__file__).resolve().parent
-sys.path.insert(0, str(PROJECT_DIR))
-
-from trend_finder import get_random_psychology_topics
-from github_writer import generate_article
-# from image_fetcher import fetch_image, build_markdown_image  # отключено
-
-app = Flask(__name__)
-
-# Хранилище логов генерации (поточно-безопасное)
-_generation_logs: dict[str, list[str]] = {}
-_generation_status: dict[str, str] = {}  # "running", "done", "error"
-_generation_results: dict[str, dict] = {}  # итоговые результаты
-
-
-def _log(job_id: str, message: str) -> None:
-    """Добавить запись в лог задачи."""
-    if job_id not in _generation_logs:
-        _generation_logs[job_id] = []
-    timestamp = datetime.now().strftime("%H:%M:%S")
-    _generation_logs[job_id].append(f"[{timestamp}] {message}")
-
-
-def _generate_article_job(job_id: str, user_topic: str | None) -> None:
+def _generate_article_job(job_id: str, user_topic: str | None, user_format: str = "article", user_style: str = "neutral") -> None:
     """Фоновая задача генерации статьи."""
     try:
         # 1. Определяем тему
@@ -49,11 +10,12 @@ def _generate_article_job(job_id: str, user_topic: str | None) -> None:
             _generation_status[job_id] = "error"
             return
 
-        # ... здесь продолжается остальной код генерации (без изменений) ...
+        # 2. Логируем полученные формат и стиль
+        _log(job_id, f"Формат: {user_format}, Стиль: {user_style}")
 
-        # 2. Генерируем статью через GitHub Models (GPT-4o-mini)
+        # 3. Генерируем статью через GitHub Models (GPT-4o-mini)
         _log(job_id, "Генерация статьи через GitHub Models (GPT-4o-mini)...")
-        article_text = generate_article(topic)
+        article_text = generate_article(topic, "", user_format, user_style)
 
         if article_text is None:
             _log(job_id, "ERROR: Ошибка генерации статьи. Проверьте GITHUB_TOKEN в файле .env.")
@@ -62,10 +24,10 @@ def _generate_article_job(job_id: str, user_topic: str | None) -> None:
 
         _log(job_id, "Статья сгенерирована.")
 
-        # 3. Формируем финальный текст (без картинок)
+        # 4. Формируем финальный текст (без картинок)
         final_text = f"# {topic}\n\n{article_text}"
 
-        # 4. Сохраняем
+        # 5. Сохраняем
         articles_dir = PROJECT_DIR / "articles"
         articles_dir.mkdir(exist_ok=True)
         safe_name = topic.replace(" ", "_").replace("/", "_").replace("\\", "_")
@@ -85,7 +47,7 @@ def _generate_article_job(job_id: str, user_topic: str | None) -> None:
         with open(filepath, "w", encoding="utf-8") as f:
             f.write(final_text)
 
-        _log(job_id, f"Статья сохранена: articles/{filename}")
+          _log(job_id, f"Статья сохранена: articles/{filename}")
 
         _generation_status[job_id] = "done"
         _generation_results[job_id] = {
@@ -138,13 +100,17 @@ def generate():
     """Запустить генерацию статьи."""
     data = request.get_json(force=True)
     topic = data.get("topic", "").strip()
+    format = data.get("format", "article")   # 👈 ДОБАВИТЬ
+    style = data.get("style", "neutral")     # 👈 ДОБАВИТЬ
 
     job_id = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
     _generation_logs[job_id] = []
     _generation_status[job_id] = "running"
 
     thread = threading.Thread(
-        target=_generate_article_job, args=(job_id, topic or None), daemon=True
+        target=_generate_article_job, 
+        args=(job_id, topic or None, format, style),  # 👈 ИЗМЕНИТЬ
+        daemon=True
     )
     thread.start()
 
