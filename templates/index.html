@@ -5,22 +5,34 @@
 {% block content %}
 <div class="main-container">
 
-    <!-- ── Form card ── -->
-    <div class="card">
-        <form id="generate-form">
-            <div class="form-group">
-                <label for="topic-input">Тема статьи <span style="color:var(--color-text-muted); font-weight:400;">(необязательно)</span></label>
-                <input type="text" id="topic-input" name="topic"
-                       placeholder="Введите тему (или оставьте пустым для случайной)"
-                       autocomplete="off">
-                <div class="hint">Оставьте пустым — тема будет подобрана автоматически из трендов</div>
-            </div>
-            <button type="submit" class="btn-primary" id="submit-btn">
-                <span id="btn-text">Сгенерировать статью</span>
-                <span id="btn-spinner" class="spinner" style="display:none"></span>
-            </button>
-        </form>
-    </div>
+   <!-- ── Form card ── -->
+<div class="card">
+    <form id="generate-form">
+        <div class="form-group">
+            <label for="topic-input">Тема статьи <span style="color:var(--color-text-muted); font-weight:400;">(необязательно)</span></label>
+            <input type="text" id="topic-input" name="topic"
+                   placeholder="Введите тему (или оставьте пустым для случайной)"
+                   autocomplete="off">
+            <div class="hint">Пожалуйста, введите тему статьи</div>
+        </div>
+
+        <div class="form-group">
+            <label for="format-select">Формат:</label>
+            <select id="format-select" class="form-control">
+                <option value="article">📄 Статья (800-1000 слов)</option>
+                <option value="social_post">📱 Пост для соцсетей (Instagram, VK)</option>
+                <option value="twitter_thread">🐦 Тред для X (Twitter)</option>
+                <option value="video_script">🎬 Сценарий для видео (YouTube, TikTok)</option>
+                <option value="ad_post">💰 Рекламный пост (продающий)</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn-primary" id="submit-btn">
+            <span id="btn-text">Сгенерировать</span>
+            <span id="btn-spinner" class="spinner" style="display:none"></span>
+        </button>
+    </form>
+</div>
 
     <!-- ── Yandex.RSA Ad Block ── -->
     <div class="ad-block">
@@ -106,10 +118,25 @@
     }
 
     form.addEventListener('submit', async function (e) {
-        e.preventDefault();
-        closeSSE();
+    e.preventDefault();
+    closeSSE();
 
-        const topic = topicInput.value.trim();
+    const topic = topicInput.value.trim();
+    
+    // ПРОВЕРКА: если тема не введена
+    if (!topic) {
+        appendLog("❌ Ошибка: введите тему статьи");
+        statusBadge.className = 'badge badge-error';
+        statusBadge.textContent = 'Ошибка ✗';
+        logsCard.style.display = 'block';
+        setBusy(false);
+        return;
+    }
+
+    const format = document.getElementById('format-select').value;
+
+    // ... остальной код (очистка логов, отправка запроса и т.д.)
+});
 
         // Reset UI
         logsContainer.innerHTML = '';
