@@ -107,6 +107,8 @@ prompts = {
 }
 
 def generate_article(topic, context="", format=None, style=None):
+    print(f"=== ОТЛАДКА: format={format}, style={style} ===")  # ← добавить
+    
     if client is None:
         print("ERROR: GITHUB_TOKEN is not set.")
         return None
