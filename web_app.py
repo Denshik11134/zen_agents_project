@@ -1,3 +1,29 @@
+import os
+import time
+import threading
+from datetime import datetime
+from pathlib import Path
+from flask import Flask, render_template, request, jsonify, Response
+from github_writer import generate_article
+
+app = Flask(__name__)
+
+PROJECT_DIR = Path(__file__).parent
+
+# Хранилища для задач
+_generation_logs = {}
+_generation_status = {}
+_generation_results = {}
+
+def _log(job_id: str, message: str) -> None:
+    """Добавить сообщение в лог задачи."""
+    if job_id not in _generation_logs:
+        _generation_logs[job_id] = []
+    _generation_logs[job_id].append(message)
+    print(f"[{job_id}] {message}")
+
+# ─── Фоновая задача генерации ───
+
 def _generate_article_job(job_id: str, user_topic: str | None, user_format: str = "article", user_style: str = "neutral") -> None:
     """Фоновая задача генерации статьи."""
     try:
@@ -14,30 +40,28 @@ def _generate_article_job(job_id: str, user_topic: str | None, user_format: str 
         _log(job_id, f"Формат: {user_format}, Стиль: {user_style}")
 
         # 3. Генерируем статью через GitHub Models (GPT-4o-mini)
-        _log(job_id, "Генерация статьи через GitHub Models (GPT-4o-mini)...")
+        _log(job_id, "Генерация через GitHub Models (GPT-4o-mini)...")
         article_text = generate_article(topic, "", user_format, user_style)
 
         if article_text is None:
-            _log(job_id, "ERROR: Ошибка генерации статьи. Проверьте GITHUB_TOKEN в файле .env.")
+            _log(job_id, "ERROR: Ошибка генерации. Проверьте GITHUB_TOKEN в переменных окружения.")
             _generation_status[job_id] = "error"
             return
 
-        _log(job_id, "Статья сгенерирована.")
+        _log(job_id, "Генерация завершена.")
 
-        # 4. Формируем финальный текст (без картинок)
+        # 4. Формируем финальный текст
         final_text = f"# {topic}\n\n{article_text}"
 
         # 5. Сохраняем
         articles_dir = PROJECT_DIR / "articles"
         articles_dir.mkdir(exist_ok=True)
         safe_name = topic.replace(" ", "_").replace("/", "_").replace("\\", "_")
-        # Ограничиваем длину имени файла
         if len(safe_name) > 80:
             safe_name = safe_name[:80]
         filename = f"{safe_name}.md"
         filepath = articles_dir / filename
 
-        # Если файл уже существует — добавляем суффикс
         counter = 1
         while filepath.exists():
             filename = f"{safe_name}_{counter}.md"
@@ -47,7 +71,7 @@ def _generate_article_job(job_id: str, user_topic: str | None, user_format: str 
         with open(filepath, "w", encoding="utf-8") as f:
             f.write(final_text)
 
-          _log(job_id, f"Статья сохранена: articles/{filename}")
+        _log(job_id, f"Сохранено: articles/{filename}")
 
         _generation_status[job_id] = "done"
         _generation_results[job_id] = {
@@ -61,47 +85,40 @@ def _generate_article_job(job_id: str, user_topic: str | None, user_format: str 
         _log(job_id, f"ERROR: Неожиданная ошибка: {e}")
         _generation_status[job_id] = "error"
 
-
 # ─── Маршруты ───
-
 
 @app.route("/")
 def index():
     """Главная страница с формой."""
     return render_template("index.html")
 
-
 @app.route("/privacy")
 def privacy():
     """Политика конфиденциальности."""
     return render_template("privacy.html")
-
 
 @app.route("/terms")
 def terms():
     """Условия использования."""
     return render_template("terms.html")
 
-
 @app.route("/about")
 def about():
     """О проекте."""
     return render_template("about.html")
-
 
 @app.route("/contacts")
 def contacts():
     """Контакты."""
     return render_template("contacts.html")
 
-
 @app.route("/generate", methods=["POST"])
 def generate():
-    """Запустить генерацию статьи."""
+    """Запустить генерацию."""
     data = request.get_json(force=True)
     topic = data.get("topic", "").strip()
-    format = data.get("format", "article")   # 👈 ДОБАВИТЬ
-    style = data.get("style", "neutral")     # 👈 ДОБАВИТЬ
+    format = data.get("format", "article")
+    style = data.get("style", "neutral")
 
     job_id = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
     _generation_logs[job_id] = []
@@ -109,13 +126,12 @@ def generate():
 
     thread = threading.Thread(
         target=_generate_article_job, 
-        args=(job_id, topic or None, format, style),  # 👈 ИЗМЕНИТЬ
+        args=(job_id, topic or None, format, style),
         daemon=True
     )
     thread.start()
 
     return jsonify({"job_id": job_id})
-
 
 @app.route("/status/<job_id>")
 def status(job_id: str):
@@ -130,7 +146,6 @@ def status(job_id: str):
         "logs": logs,
         "result": result,
     })
-
 
 @app.route("/stream/<job_id>")
 def stream(job_id: str):
@@ -152,15 +167,13 @@ def stream(job_id: str):
 
     return Response(event_stream(), mimetype="text/event-stream")
 
-
 @app.errorhandler(500)
 def internal_error(error):
     return jsonify({"error": "Внутренняя ошибка сервера"}), 500
 
-
 if __name__ == "__main__":
     print("=" * 50)
-    print("  Генератор статей — Яндекс.Дзен")
+    print("  Генератор контента — neirostat.ru")
     print("=" * 50)
     print()
     print("  Откройте в браузере: http://0.0.0.0:5000")
@@ -169,3 +182,4 @@ if __name__ == "__main__":
     print("=" * 50)
     print()
     app.run(host="0.0.0.0", port=5000, debug=False, threaded=True)
+
