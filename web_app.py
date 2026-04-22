@@ -24,7 +24,7 @@ def _log(job_id: str, message: str) -> None:
 
 # ─── Фоновая задача генерации ───
 
-def _generate_article_job(job_id: str, user_topic: str | None, user_format: str = "article", user_style: str = "neutral") -> None:
+def _generate_article_job(job_id: str, user_topic: str | None, user_format: str = "article", user_style: str = "neutral", user_details: str = "") -> None:
     """Фоновая задача генерации статьи."""
     try:
         # 1. Определяем тему
@@ -41,8 +41,7 @@ def _generate_article_job(job_id: str, user_topic: str | None, user_format: str 
 
         # 3. Генерируем статью через GitHub Models (GPT-4o-mini)
         _log(job_id, "Генерация через GitHub Models (GPT-4o-mini)...")
-        article_text = generate_article(topic, "", user_format, user_style)
-
+        article_text = generate_article(topic, "", user_format, user_style, user_details)
         if article_text is None:
             _log(job_id, "ERROR: Ошибка генерации. Проверьте GITHUB_TOKEN в переменных окружения.")
             _generation_status[job_id] = "error"
@@ -147,7 +146,7 @@ def status(job_id: str):
         "result": result,
     })
 
-@app.route("/stream/<job_id>")
+@app.route("/stream/<job_id>", methods=["GET"])
 def stream(job_id: str):
     """Server-Sent Events для вывода логов в реальном времени."""
     def event_stream():
