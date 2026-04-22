@@ -103,94 +103,21 @@
     const downloadBtn = document.getElementById('download-btn');
     const formatSelect = document.getElementById('format-select');
     const styleGroup = document.getElementById('style-group');
-    const detailsGroup = document.getElementById('details-group');
-    const detailsInput = document.getElementById('details-input');
 
     let currentEventSource = null;
     let currentArticleFilename = '';
 
-    // Настройки для каждого формата
-    const formatConfig = {
-        article: {
-            topicLabel: 'Тема статьи',
-            topicHint: 'Введите тему для развёрнутой статьи',
-            showStyle: false,
-            showDetails: true,
-            detailsLabel: 'Дополнительные указания',
-            detailsPlaceholder: 'Например: писать простым языком, добавить примеры, избегать воды',
-            detailsHint: 'Укажите любые пожелания к статье'
-        },
-        social_post: {
-            topicLabel: 'О чём пост?',
-            topicHint: 'Введите тему для вовлекающего поста',
-            showStyle: true,
-            showDetails: true,
-            detailsLabel: 'Что хотите сказать?',
-            detailsPlaceholder: 'Например: сделать акцент на пользе, добавить вопрос к аудитории',
-            detailsHint: 'Опишите идею или ключевые мысли'
-        },
-        ad_post: {
-            topicLabel: 'Что продаём?',
-            topicHint: 'Укажите товар или услугу',
-            showStyle: true,
-            showDetails: true,
-            detailsLabel: 'Характеристики и преимущества',
-            detailsPlaceholder: 'Например: 3 режима, 5 насадок, ионизация, быстрая сушка',
-            detailsHint: 'Перечислите все важные детали и функции'
-        },
-        twitter_thread: {
-            topicLabel: 'Тема треда',
-            topicHint: 'Введите тему для цепочки твитов',
-            showStyle: false,
-            showDetails: true,
-            detailsLabel: 'Какие мысли раскрыть?',
-            detailsPlaceholder: 'Например: 5 советов, личная история, разбор ошибок',
-            detailsHint: 'Укажите структуру или ключевые пункты'
-        },
-        video_script: {
-            topicLabel: 'О чём видео?',
-            topicHint: 'Введите тему для сценария',
-            showStyle: true,
-            showDetails: true,
-            detailsLabel: 'Сценарий / идеи',
-            detailsPlaceholder: 'Например: формат обзора, 3 лайфхака, история успеха',
-            detailsHint: 'Опишите формат, длительность, ключевые сцены'
-        }
-    };
-
-    function updateFormByFormat() {
-        const format = formatSelect.value;
-        const config = formatConfig[format];
-        
-        document.getElementById('topic-label').textContent = config.topicLabel;
-        document.getElementById('topic-hint').textContent = config.topicHint;
-        
-        styleGroup.style.display = config.showStyle ? 'block' : 'none';
-        
-        if (config.showDetails && detailsGroup) {
-            detailsGroup.style.display = 'block';
-            document.getElementById('details-label').textContent = config.detailsLabel;
-            detailsInput.placeholder = config.detailsPlaceholder;
-            document.getElementById('details-hint').textContent = config.detailsHint;
-        } else if (detailsGroup) {
-            detailsGroup.style.display = 'none';
-        }
-    }
-
     function toggleStyleGroup() {
         const format = formatSelect.value;
-        const config = formatConfig[format];
-        if (config && styleGroup) {
-            styleGroup.style.display = config.showStyle ? 'block' : 'none';
+        const showForFormats = ['social_post', 'ad_post', 'video_script'];
+        if (showForFormats.includes(format)) {
+            styleGroup.style.display = 'block';
+        } else {
+            styleGroup.style.display = 'none';
         }
     }
-    
-    formatSelect.addEventListener('change', () => {
-        updateFormByFormat();
-        if (detailsInput) detailsInput.value = '';
-    });
-    
-    updateFormByFormat();
+    formatSelect.addEventListener('change', toggleStyleGroup);
+    toggleStyleGroup();
 
     function setBusy(busy) {
         submitBtn.disabled = busy;
@@ -220,7 +147,7 @@
 
         const topic = topicInput.value.trim();
         if (!topic) {
-            appendLog("❌ Ошибка: введите тему");
+            appendLog("❌ Ошибка: введите тему статьи");
             statusBadge.className = 'badge badge-error';
             statusBadge.textContent = 'Ошибка ✗';
             logsCard.style.display = 'block';
@@ -230,7 +157,6 @@
 
         const format = formatSelect.value;
         const style = styleGroup.style.display !== 'none' ? document.getElementById('style-select').value : 'neutral';
-        const details = detailsInput ? detailsInput.value : '';
 
         logsContainer.innerHTML = '';
         resultSection.style.display = 'none';
@@ -244,11 +170,10 @@
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
-                    topic: topic, 
-                    format: format,
-                    style: style,
-                    details: details
-                })
+    topic: topic, 
+    format: format,
+    style: style
+})
             });
             const data = await resp.json();
             const jobId = data.job_id;
