@@ -16,6 +16,14 @@
             <div class="hint">Пожалуйста, введите тему статьи</div>
         </div>
 
+    <!-- Поле деталей -->
+<div class="form-group" id="details-group">
+    <label for="details-input">Детали / особенности <span style="color:var(--color-text-muted); font-weight:400;">(необязательно)</span></label>
+    <textarea id="details-input" name="details" rows="3" 
+              placeholder="Например: 3 функции, 5 насадок, ионизация, быстрая сушка"></textarea>
+    <div class="hint">Опишите характеристики, преимущества или любые пожелания</div>
+</div>
+
         <div class="form-group">
             <label for="format-select">Формат:</label>
             <select id="format-select" class="form-control">
@@ -156,28 +164,29 @@
         }
 
         const format = formatSelect.value;
-        const style = styleGroup.style.display !== 'none' ? document.getElementById('style-select').value : 'neutral';
+const style = styleGroup.style.display !== 'none' ? document.getElementById('style-select').value : 'neutral';
+const details = document.getElementById('details-input').value;
 
-        logsContainer.innerHTML = '';
-        resultSection.style.display = 'none';
-        logsCard.style.display = 'block';
-        statusBadge.className = 'badge badge-running';
-        statusBadge.textContent = 'Выполняется…';
-        setBusy(true);
+logsContainer.innerHTML = '';
+resultSection.style.display = 'none';
+logsCard.style.display = 'block';
+statusBadge.className = 'badge badge-running';
+statusBadge.textContent = 'Выполняется…';
+setBusy(true);
 
-        try {
-            const resp = await fetch('/generate', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-    topic: topic, 
-    format: format,
-    style: style
-})
-            });
-            const data = await resp.json();
-            const jobId = data.job_id;
-
+try {
+    const resp = await fetch('/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+            topic: topic, 
+            format: format,
+            style: style,
+            details: details
+        })
+    });
+    const data = await resp.json();
+    const jobId = data.job_id;
             currentEventSource = new EventSource('/stream/' + jobId);
             currentEventSource.onmessage = function (e) {
                 const msg = e.data;
