@@ -114,11 +114,11 @@ def contacts():
 
 @app.route("/generate", methods=["POST"])
 def generate():
-    """Запустить генерацию."""
     data = request.get_json(force=True)
     topic = data.get("topic", "").strip()
     format = data.get("format", "article")
     style = data.get("style", "neutral")
+    details = data.get("details", "")  # ← ДОБАВИТЬ
 
     job_id = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
     _generation_logs[job_id] = []
@@ -126,7 +126,7 @@ def generate():
 
     thread = threading.Thread(
         target=_generate_article_job, 
-        args=(job_id, topic or None, format, style),
+        args=(job_id, topic or None, format, style, details),  # ← ДОБАВИТЬ details
         daemon=True
     )
     thread.start()
