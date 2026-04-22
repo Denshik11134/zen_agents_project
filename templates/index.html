@@ -115,43 +115,60 @@
     let currentEventSource = null;
     let currentArticleFilename = '';
 
-    function toggleStyleGroup() {
-        const format = formatSelect.value;
-        const showForFormats = ['social_post', 'ad_post', 'video_script'];
-        if (showForFormats.includes(format)) {
-            styleGroup.style.display = 'block';
-        } else {
-            styleGroup.style.display = 'none';
-        }
+function toggleStyleGroup() {
+    const format = formatSelect.value;
+    const showForFormats = ['social_post', 'ad_post', 'video_script'];
+    if (showForFormats.includes(format)) {
+        styleGroup.style.display = 'block';
+    } else {
+        styleGroup.style.display = 'none';
     }
-    formatSelect.addEventListener('change', toggleStyleGroup);
+}
+
+function toggleDetailsGroup() {
+    const format = formatSelect.value;
+    const showDetailsFor = ['ad_post'];  // только для продающего поста
+    const detailsGroup = document.getElementById('details-group');
+    if (showDetailsFor.includes(format)) {
+        detailsGroup.style.display = 'block';
+    } else {
+        detailsGroup.style.display = 'none';
+    }
+}
+
+formatSelect.addEventListener('change', () => {
     toggleStyleGroup();
+    toggleDetailsGroup();
+});
 
-    function setBusy(busy) {
-        submitBtn.disabled = busy;
-        btnText.textContent = busy ? 'Генерация…' : 'Сгенерировать';
-        btnSpinner.style.display = busy ? 'inline-block' : 'none';
+toggleStyleGroup();
+toggleDetailsGroup();
+
+function setBusy(busy) {
+    submitBtn.disabled = busy;
+    btnText.textContent = busy ? 'Генерация…' : 'Сгенерировать';
+    btnSpinner.style.display = busy ? 'inline-block' : 'none';
+}
+
+function closeSSE() {
+    if (currentEventSource) {
+        currentEventSource.close();
+        currentEventSource = null;
     }
+}
 
-    function closeSSE() {
-        if (currentEventSource) {
-            currentEventSource.close();
-            currentEventSource = null;
-        }
-    }
+function appendLog(text) {
+    const isError = text.includes('ERROR');
+    const div = document.createElement('div');
+    div.className = 'log-line' + (isError ? ' log-error' : '');
+    div.textContent = text;
+    logsContainer.appendChild(div);
+    logsContainer.scrollTop = logsContainer.scrollHeight;
+}
 
-    function appendLog(text) {
-        const isError = text.includes('ERROR');
-        const div = document.createElement('div');
-        div.className = 'log-line' + (isError ? ' log-error' : '');
-        div.textContent = text;
-        logsContainer.appendChild(div);
-        logsContainer.scrollTop = logsContainer.scrollHeight;
-    }
-
-    form.addEventListener('submit', async function (e) {
-        e.preventDefault();
-        closeSSE();
+form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    closeSSE();
 
         const topic = topicInput.value.trim();
         if (!topic) {
