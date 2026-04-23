@@ -106,9 +106,10 @@
         </div>
         <textarea id="article-editor" spellcheck="false"></textarea>
         <div class="action-buttons">
-            <button class="btn-secondary btn-copy" id="copy-btn">📋 Скопировать</button>
-            <button class="btn-secondary btn-download" id="download-btn">⬇ Скачать (.md)</button>
-        </div>
+    <button class="btn-secondary btn-copy" id="copy-btn">📋 Скопировать</button>
+    <button class="btn-secondary btn-download" id="download-btn">⬇ Скачать (.md)</button>
+    <button class="btn-secondary btn-share" id="share-btn">📤 Поделиться</button>
+</div>
     </div>
 <!-- ── History block ── -->
 <div class="card history-card" id="history-card">
@@ -492,8 +493,47 @@ if (clearBtn) {
     });
 }
 
-// Загружаем историю при старте
-renderHistory();
+// ========== ПОДЕЛИТЬСЯ (с поддержкой телефонов) ==========
+const shareBtn = document.getElementById('share-btn');
+if (shareBtn) {
+    shareBtn.addEventListener('click', async () => {
+        const articleText = articleEditor.value;
+        const topic = resultTopic.textContent || 'сгенерированный текст';
+        
+        if (!articleText) {
+            alert('Сначала сгенерируйте текст');
+            return;
+        }
+        
+        const shareTitle = 'Neirostat — генератор контента';
+        const shareText = `Сгенерировал контент на тему "${topic}" с помощью Neirostat`;
+        const shareUrl = 'https://neirostat.ru';
+        
+        // Пробуем использовать Web Share API (для телефонов)
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: shareTitle,
+                    text: shareText,
+                    url: shareUrl
+                });
+                console.log('Поделились через систему');
+            } catch (err) {
+                if (err.name !== 'AbortError') {
+                    console.error('Ошибка шаринга:', err);
+                }
+            }
+        } else {
+            // На компьютере — копируем текст (как было)
+            const fullText = `${shareText}\n\n${articleText.substring(0, 500)}${articleText.length > 500 ? '…' : ''}\n\n✨ Попробуй сам: ${shareUrl}`;
+            navigator.clipboard.writeText(fullText).then(() => {
+                alert('✅ Текст скопирован! Теперь вы можете вставить его в пост, твит или сообщение.');
+            }).catch(() => {
+                alert('❌ Не удалось скопировать. Попробуйте вручную.');
+            });
+        }
+    });
+}
 })();
 </script>
 {% endblock %}
