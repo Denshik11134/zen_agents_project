@@ -175,6 +175,7 @@ function toggleDetailsGroup() {
 formatSelect.addEventListener('change', () => {
     toggleStyleGroup();
     toggleDetailsGroup();
+    updateTopicField();   // ← ДОБАВИТЬ ЭТУ СТРОКУ
 });
 
 toggleStyleGroup();
