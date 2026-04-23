@@ -742,3 +742,59 @@ img {
 .btn-toggle-logs:hover {
     background: #dee2e6;
 }
+/* История генераций */
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.btn-clear-history {
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-clear-history:hover {
+    background: #c82333;
+}
+
+.history-item {
+    background: #f8f9fa;
+    border-left: 4px solid #667eea;
+    padding: 10px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.history-item:hover {
+    background: #e9ecef;
+}
+
+.history-item-title {
+    font-weight: bold;
+    margin-bottom: 4px;
+    font-size: 14px;
+}
+
+.history-item-meta {
+    font-size: 11px;
+    color: #6c757d;
+}
+
+.history-empty {
+    color: #6c757d;
+    text-align: center;
+    padding: 20px;
+    font-style: italic;
+}

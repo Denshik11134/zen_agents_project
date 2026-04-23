@@ -110,7 +110,16 @@
             <button class="btn-secondary btn-download" id="download-btn">⬇ Скачать (.md)</button>
         </div>
     </div>
-
+<!-- ── History block ── -->
+<div class="card history-card" id="history-card">
+    <div class="history-header">
+        <h3>📜 История генераций</h3>
+        <button type="button" id="clear-history-btn" class="btn-clear-history">Очистить всё</button>
+    </div>
+    <div id="history-list">
+        <div class="history-empty">История пуста. Сгенерируйте текст — он появится здесь.</div>
+    </div>
+</div>
 </div>
 {% endblock %}
 
@@ -403,6 +412,85 @@ if (toggleLogsBtn) {
         }
     });
 }
+// ========== ИСТОРИЯ ГЕНЕРАЦИЙ (localStorage) ==========
+const STORAGE_KEY = 'neirostat_history';
+const MAX_HISTORY = 10;
+
+function getHistory() {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    return stored ? JSON.parse(stored) : [];
+}
+
+function saveHistory(history) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(history.slice(0, MAX_HISTORY)));
+}
+
+function addToHistory(topic, article, format) {
+    const history = getHistory();
+    const newItem = {
+        id: Date.now(),
+        topic: topic,
+        article: article,
+        format: format,
+        date: new Date().toLocaleString()
+    };
+    history.unshift(newItem);
+    saveHistory(history);
+    renderHistory();
+}
+
+function renderHistory() {
+    const history = getHistory();
+    const container = document.getElementById('history-list');
+    if (!container) return;
+
+    if (history.length === 0) {
+        container.innerHTML = '<div class="history-empty">История пуста. Сгенерируйте текст — он появится здесь.</div>';
+        return;
+    }
+
+    container.innerHTML = history.map(item => `
+        <div class="history-item" data-id="${item.id}">
+            <div class="history-item-title">${escapeHtml(item.topic)}</div>
+            <div class="history-item-meta">${item.format} | ${item.date}</div>
+        </div>
+    `).join('');
+
+    document.querySelectorAll('.history-item').forEach(el => {
+        el.addEventListener('click', () => {
+            const id = parseInt(el.dataset.id);
+            const item = history.find(h => h.id === id);
+            if (item) {
+                document.getElementById('article-editor').value = item.article;
+                document.getElementById('result-topic').textContent = item.topic;
+                document.getElementById('result-section').style.display = 'block';
+            }
+        });
+    });
+}
+
+function escapeHtml(str) {
+    return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+    });
+}
+
+// Очистка истории
+const clearBtn = document.getElementById('clear-history-btn');
+if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+        if (confirm('Удалить всю историю генераций?')) {
+            localStorage.removeItem(STORAGE_KEY);
+            renderHistory();
+        }
+    });
+}
+
+// Загружаем историю при старте
+renderHistory();
 })();
 </script>
 {% endblock %}
