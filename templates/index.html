@@ -368,6 +368,9 @@ try {
         articleEditor.value = result.article;
         currentArticleFilename = result.filename || 'article.md';
         resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Сохраняем в историю
+const formatText = formatSelect.options[formatSelect.selectedIndex]?.text || 'текст';
+addToHistory(result.topic, result.article, formatText);
     }
 
     copyBtn.addEventListener('click', async function () {
