@@ -18,7 +18,25 @@
                    autocomplete="off" required>
             <div class="hint">Пожалуйста, введите тему статьи</div>
         </div>
-
+<!-- Кнопки-примеры -->
+<div class="form-group" id="examples-group">
+    <label>🔥 Попробуйте примеры:</label>
+    <div class="examples-buttons">
+        <button type="button" class="btn-example" data-topic="Фен для волос с ионизацией, 3 режима, 5 насадок">
+            💨 Фен для волос
+        </button>
+        <button type="button" class="btn-example" data-topic="Как выбрать ноутбук для работы и учёбы">
+            💻 Как выбрать ноутбук
+        </button>
+        <button type="button" class="btn-example" data-topic="Мотивация на утро: 5 простых шагов к продуктивному дню">
+            🌅 Мотивация на утро
+        </button>
+        <button type="button" class="btn-example" data-topic="Тренды контент-маркетинга в 2026 году">
+            📈 Тренды 2026
+        </button>
+    </div>
+    <div class="hint">✨ Нажмите на кнопку — тема подставится автоматически</div>
+</div>
     <!-- Поле деталей -->
 <div class="form-group" id="details-group">
     <label for="details-input">Детали / особенности <span style="color:var(--color-text-muted); font-weight:400;">(необязательно)</span></label>
@@ -114,6 +132,33 @@
     const downloadBtn = document.getElementById('download-btn');
     const formatSelect = document.getElementById('format-select');
     const styleGroup = document.getElementById('style-group');
+    // Кнопки-примеры с красивым эффектом
+const exampleButtons = document.querySelectorAll('.btn-example');
+exampleButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const topicText = btn.getAttribute('data-topic');
+        const inputField = document.getElementById('topic-input');
+        
+        // Вставляем текст
+        inputField.value = topicText;
+        
+        // Эффект подсветки зелёным
+        inputField.style.transition = 'background-color 0.3s';
+        inputField.style.backgroundColor = '#d4edda';
+        setTimeout(() => {
+            inputField.style.backgroundColor = '';
+        }, 500);
+        
+        // Фокус на поле
+        inputField.focus();
+        
+        // Эффект нажатия на кнопку
+        btn.style.transform = 'scale(0.98)';
+        setTimeout(() => {
+            btn.style.transform = '';
+        }, 150);
+    });
+});
 // Конфигурация подписей для каждого формата
 const formatConfig = {
     article: {

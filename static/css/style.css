@@ -689,3 +689,40 @@ img {
     margin: 0 auto;
     padding: 0 1rem;
 }
+/* Кнопки-примеры */
+#examples-group {
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+.examples-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 12px 0 8px;
+}
+
+.btn-example {
+    background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+    border: 1px solid #d0d7de;
+    border-radius: 40px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #1f2d3d;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.btn-example:hover {
+    background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-color: #b0b8c2;
+}
+
+.btn-example:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
