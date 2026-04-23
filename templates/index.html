@@ -9,7 +9,10 @@
 <div class="card">
     <form id="generate-form">
         <div class="form-group">
-            <label for="topic-input">Тема статьи <span style="color:var(--color-text-muted); font-weight:400;">(обязательно)</span></label>
+            <label for="topic-input">
+    <span id="topic-label-text">Тема статьи</span>
+    <span style="color:var(--color-text-muted); font-weight:400;">(обязательно)</span>
+</label>
             <input type="text" id="topic-input" name="topic"
                    placeholder="Введите тему статьи"
                    autocomplete="off" required>
@@ -111,7 +114,40 @@
     const downloadBtn = document.getElementById('download-btn');
     const formatSelect = document.getElementById('format-select');
     const styleGroup = document.getElementById('style-group');
+// Конфигурация подписей для каждого формата
+const formatConfig = {
+    article: {
+        label: 'Тема статьи',
+        placeholder: 'Введите тему статьи'
+    },
+    social_post: {
+        label: 'О чём пост?',
+        placeholder: 'Например: как правильно питаться, мотивация на утро'
+    },
+    ad_post: {
+        label: 'Что продаём?',
+        placeholder: 'Например: фен для волос, курс по английскому'
+    },
+    twitter_thread: {
+        label: 'Тема треда',
+        placeholder: 'Например: как я начал бегать, 5 советов по финансам'
+    },
+    video_script: {
+        label: 'О чём видео?',
+        placeholder: 'Например: обзор iPhone, рецепт пиццы'
+    }
+};
 
+function updateTopicField() {
+    const format = formatSelect.value;
+    const config = formatConfig[format];
+    if (config) {
+        const labelSpan = document.getElementById('topic-label-text');
+        if (labelSpan) labelSpan.textContent = config.label;
+        const inputEl = document.getElementById('topic-input');
+        if (inputEl) inputEl.placeholder = config.placeholder;
+    }
+}
     let currentEventSource = null;
     let currentArticleFilename = '';
 
@@ -143,7 +179,7 @@ formatSelect.addEventListener('change', () => {
 
 toggleStyleGroup();
 toggleDetailsGroup();
-
+updateTopicField();
 function setBusy(busy) {
     submitBtn.disabled = busy;
     btnText.textContent = busy ? 'Генерация…' : 'Сгенерировать';
