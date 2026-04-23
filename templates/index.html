@@ -90,12 +90,13 @@
 
     <!-- ── Logs card ── -->
     <div class="card logs-card" id="logs-card">
-        <div class="logs-header">
-            <h3>📋 Процесс генерации</h3>
-            <span id="status-badge" class="badge badge-running">Выполняется…</span>
-        </div>
-        <div id="logs-container"></div>
+    <div class="logs-header">
+        <h3>📋 Процесс генерации</h3>
+        <button type="button" id="toggle-logs-btn" class="btn-toggle-logs">▼ Свернуть</button>
+        <span id="status-badge" class="badge badge-running">Выполняется…</span>
     </div>
+    <div id="logs-container"></div>
+</div>
 
     <!-- ── Result card ── -->
     <div class="card result-section" id="result-section">
@@ -384,6 +385,24 @@ try {
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
     });
+    // Сворачивание логов
+const toggleLogsBtn = document.getElementById('toggle-logs-btn');
+const logsContainerElem = document.getElementById('logs-container');
+let logsVisible = true;
+
+if (toggleLogsBtn) {
+    toggleLogsBtn.addEventListener('click', () => {
+        if (logsVisible) {
+            logsContainerElem.style.display = 'none';
+            toggleLogsBtn.textContent = '▶ Развернуть';
+            logsVisible = false;
+        } else {
+            logsContainerElem.style.display = 'block';
+            toggleLogsBtn.textContent = '▼ Свернуть';
+            logsVisible = true;
+        }
+    });
+}
 })();
 </script>
 {% endblock %}
