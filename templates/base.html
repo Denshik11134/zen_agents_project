@@ -48,8 +48,8 @@
     <p class="subtitle">Создание качественных текстов с помощью искусственного интеллекта</p>
 </header>
 
-<!-- ── Navigation ── -->
-<nav class="site-nav">
+<!-- Десктопное меню (видно на компьютере) -->
+<nav class="site-nav desktop-nav">
     <div class="nav-inner">
         <a href="{{ url_for('index') }}" class="{% if request.path == '/' %}active{% endif %}">Главная</a>
         <a href="{{ url_for('about') }}" class="{% if request.path == '/about' %}active{% endif %}">О проекте</a>
@@ -58,6 +58,18 @@
         <a href="{{ url_for('terms') }}" class="{% if request.path == '/terms' %}active{% endif %}">Условия</a>
     </div>
 </nav>
+
+<!-- Мобильное меню (гамбургер) -->
+<div class="mobile-nav">
+    <button class="hamburger" id="hamburger-btn">☰</button>
+    <div class="mobile-menu" id="mobile-menu">
+        <a href="{{ url_for('index') }}">Главная</a>
+        <a href="{{ url_for('about') }}">О проекте</a>
+        <a href="{{ url_for('contacts') }}">Контакты</a>
+        <a href="{{ url_for('privacy') }}">Конфиденциальность</a>
+        <a href="{{ url_for('terms') }}">Условия</a>
+    </div>
+</div>
 
 {% block content %}{% endblock %}
 
@@ -74,6 +86,23 @@
     </div>
 </footer>
 
-{% block extra_scripts %}{% endblock %}
+{% block extra_scripts %}
+<script>
+    const hamburger = document.getElementById('hamburger-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    if (hamburger && mobileMenu) {
+        hamburger.addEventListener('click', () => {
+            mobileMenu.classList.toggle('show');
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
+                mobileMenu.classList.remove('show');
+            }
+        });
+    }
+</script>
+{% endblock %}
 </body>
 </html>
