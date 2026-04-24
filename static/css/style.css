@@ -864,7 +864,7 @@ img {
 }
 
 .mobile-menu.show {
-    display: flex;
+    display: flex !important;
 }
 
 /* Адаптация для телефонов */

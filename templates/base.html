@@ -88,20 +88,23 @@
 
 {% block extra_scripts %}
 <script>
-    const hamburger = document.getElementById('hamburger-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
-    
-    if (hamburger && mobileMenu) {
-        hamburger.addEventListener('click', () => {
-            mobileMenu.classList.toggle('show');
-        });
+    document.addEventListener('DOMContentLoaded', function() {
+        const hamburger = document.getElementById('hamburger-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
         
-        document.addEventListener('click', (e) => {
-            if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
-                mobileMenu.classList.remove('show');
-            }
-        });
-    }
+        if (hamburger && mobileMenu) {
+            hamburger.addEventListener('click', function(e) {
+                e.stopPropagation();
+                mobileMenu.classList.toggle('show');
+            });
+            
+            document.addEventListener('click', function(e) {
+                if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
+                    mobileMenu.classList.remove('show');
+                }
+            });
+        }
+    });
 </script>
 {% endblock %}
 </body>
