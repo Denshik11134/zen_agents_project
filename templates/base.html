@@ -88,24 +88,20 @@
 
 {% block extra_scripts %}
 <script>
+    // Ждём загрузки страницы
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('Скрипт загружен и DOM готов');
+        var hamburger = document.getElementById('hamburger-btn');
+        var menu = document.getElementById('mobile-menu');
         
-        const hamburger = document.getElementById('hamburger-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        
-        console.log('Кнопка найдена:', hamburger);
-        console.log('Меню найдено:', mobileMenu);
-        
-        if (hamburger && mobileMenu) {
-            hamburger.addEventListener('click', function(e) {
-                e.stopPropagation();
-                console.log('Клик по бургеру, класс show переключается');
-                mobileMenu.classList.toggle('show');
-                console.log('Текущие классы меню:', mobileMenu.className);
-            });
-        } else {
-            console.log('ОШИБКА: кнопка или меню не найдены!');
+        if (hamburger && menu) {
+            hamburger.onclick = function(e) {
+                e.preventDefault();
+                if (menu.style.display === 'flex') {
+                    menu.style.display = 'none';
+                } else {
+                    menu.style.display = 'flex';
+                }
+            };
         }
     });
 </script>
