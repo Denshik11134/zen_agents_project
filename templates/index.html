@@ -430,6 +430,7 @@ function saveHistory(history) {
 }
 
 function addToHistory(topic, article, format) {
+    console.log('addToHistory вызвана, article длина:', article ? article.length : 'пусто');
     const history = getHistory();
     const newItem = {
         id: Date.now(),
