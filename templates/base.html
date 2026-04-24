@@ -89,20 +89,23 @@
 {% block extra_scripts %}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        console.log('Скрипт загружен и DOM готов');
+        
         const hamburger = document.getElementById('hamburger-btn');
         const mobileMenu = document.getElementById('mobile-menu');
+        
+        console.log('Кнопка найдена:', hamburger);
+        console.log('Меню найдено:', mobileMenu);
         
         if (hamburger && mobileMenu) {
             hamburger.addEventListener('click', function(e) {
                 e.stopPropagation();
+                console.log('Клик по бургеру, класс show переключается');
                 mobileMenu.classList.toggle('show');
+                console.log('Текущие классы меню:', mobileMenu.className);
             });
-            
-            document.addEventListener('click', function(e) {
-                if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
-                    mobileMenu.classList.remove('show');
-                }
-            });
+        } else {
+            console.log('ОШИБКА: кнопка или меню не найдены!');
         }
     });
 </script>
