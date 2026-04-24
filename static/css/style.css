@@ -876,3 +876,8 @@ img {
         display: block;
     }
 }
+/* Временная отладка — потом удалить */
+.mobile-menu.show {
+    display: flex !important;
+    background: red !important;
+}
