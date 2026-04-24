@@ -61,7 +61,7 @@
 
 <!-- Мобильное меню (гамбургер) -->
 <div class="mobile-nav">
-    <button class="hamburger" id="hamburger-btn">☰</button>
+    <button class="hamburger" id="hamburger-btn" onclick="toggleMenu()">☰</button>
     <div class="mobile-menu" id="mobile-menu">
         <a href="{{ url_for('index') }}">Главная</a>
         <a href="{{ url_for('about') }}">О проекте</a>
@@ -88,22 +88,15 @@
 
 {% block extra_scripts %}
 <script>
-    // Ждём загрузки страницы
-    document.addEventListener('DOMContentLoaded', function() {
-        var hamburger = document.getElementById('hamburger-btn');
+    // Простейший открыватель меню
+    function toggleMenu() {
         var menu = document.getElementById('mobile-menu');
-        
-        if (hamburger && menu) {
-            hamburger.onclick = function(e) {
-                e.preventDefault();
-                if (menu.style.display === 'flex') {
-                    menu.style.display = 'none';
-                } else {
-                    menu.style.display = 'flex';
-                }
-            };
+        if (menu.style.display === 'flex') {
+            menu.style.display = 'none';
+        } else {
+            menu.style.display = 'flex';
         }
-    });
+    }
 </script>
 {% endblock %}
 </body>
