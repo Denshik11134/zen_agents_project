@@ -866,11 +866,6 @@ img {
     background: #f5f5f5;
 }
 
-/* Класс для показа меню */
-.mobile-menu.show {
-    display: flex !important;
-}
-
 /* Адаптация для телефонов */
 @media (max-width: 768px) {
     .desktop-nav {
@@ -879,9 +874,9 @@ img {
     .mobile-nav {
         display: block !important;
     }
-}
-.mobile-menu.show {
-    display: flex !important;
+    .mobile-menu.show {
+        display: flex !important;
+    }
 }
 /* ===== ПРИНУДИТЕЛЬНЫЕ ПРАВИЛА ТОЛЬКО ДЛЯ ТЕЛЕФОНОВ ===== */
 @media (max-width: 768px) {
