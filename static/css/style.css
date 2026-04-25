@@ -840,7 +840,8 @@ img {
     display: none;
     position: absolute;
     top: 100%;
-    left: 0;
+    right: 0;
+    left: auto;
     background: white;
     border: 1px solid #ddd;
     border-radius: 12px;
@@ -848,7 +849,7 @@ img {
     flex-direction: column;
     min-width: 180px;
     z-index: 1000;
-    margin-top: 5px;
+    margin-top: 8px;
 }
 
 .mobile-menu a {
@@ -873,30 +874,13 @@ img {
     }
     .mobile-nav {
         display: block !important;
+        text-align: right;
+    }
+    .mobile-menu {
+        right: 0;
+        left: auto;
     }
     .mobile-menu.show {
         display: flex !important;
-    }
-}
-/* ===== ПРИНУДИТЕЛЬНЫЕ ПРАВИЛА ТОЛЬКО ДЛЯ ТЕЛЕФОНОВ ===== */
-@media (max-width: 768px) {
-    .desktop-nav {
-        display: none !important;
-    }
-    .mobile-nav {
-        display: block !important;
-    }
-    .site-nav {
-        display: none !important;
-    }
-    .mobile-menu.show {
-        display: flex !important;
-    }
-    .main-container {
-        padding-left: 1rem !important;
-        padding-right: 1rem !important;
-    }
-    .card {
-        padding: 1rem !important;
     }
 }
