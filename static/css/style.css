@@ -823,6 +823,8 @@ img {
 .mobile-nav {
     display: none;
     position: relative;
+    justify-content: flex-end;
+    padding-right: 15px;
 }
 
 .hamburger {
@@ -838,7 +840,7 @@ img {
     display: none;
     position: absolute;
     top: 100%;
-    right: 0;
+    left: 0;
     background: white;
     border: 1px solid #ddd;
     border-radius: 12px;
@@ -846,6 +848,7 @@ img {
     flex-direction: column;
     min-width: 180px;
     z-index: 1000;
+    margin-top: 5px;
 }
 
 .mobile-menu a {
