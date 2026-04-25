@@ -883,3 +883,25 @@ img {
 .mobile-menu.show {
     display: flex !important;
 }
+/* ===== ПРИНУДИТЕЛЬНЫЕ ПРАВИЛА ТОЛЬКО ДЛЯ ТЕЛЕФОНОВ ===== */
+@media (max-width: 768px) {
+    .desktop-nav {
+        display: none !important;
+    }
+    .mobile-nav {
+        display: block !important;
+    }
+    .site-nav {
+        display: none !important;
+    }
+    .mobile-menu.show {
+        display: flex !important;
+    }
+    .main-container {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+    .card {
+        padding: 1rem !important;
+    }
+}
