@@ -1,27 +1,52 @@
 {% extends "base.html" %}
 
-{% block title %}Контакты — neirostat.ru{% endblock %}
+{% block title %}Контакты — Neirostat{% endblock %}
 
 {% block content %}
 <div class="content-page">
     <div class="content-card">
-        <h1>Контакты</h1>
-
-        <p>Если у вас есть вопросы, предложения или вы хотите сообщить о проблеме, свяжитесь с нами любым из способов ниже.</p>
-
-        <h2>Электронная почта</h2>
-        <p>Напишите нам: <a href="mailto:support@neirostat.ru">support@neirostat.ru</a></p>
-
-        <h2>GitHub</h2>
-        <p>Создайте Issue или Discussion в репозитории проекта: <a href="https://github.com" target="_blank" rel="noopener noreferrer">GitHub Repository</a></p>
-
-        <h2>Обратная связь</h2>
-        <p>Мы ценим ваши отзывы и предложения. Если вы заметили ошибку в работе сервиса или хотите предложить новую функцию — не стесняйтесь обращаться.</p>
-
-        <h2>Время ответа</h2>
-        <p>Мы стараемся отвечать на обращения в течение 1–2 рабочих дней.</p>
-
-        <a href="{{ url_for('index') }}" class="back-link">← На главную</a>
+        <h1>📬 Контакты</h1>
+        
+        <p>Мы всегда рады обратной связи, предложениям и сотрудничеству. Выберите удобный способ связи:</p>
+        
+        <h2>📧 По вопросам работы сервиса</h2>
+        <p>Если вы нашли баг, хотите предложить идею или у вас есть вопрос по работе Neirostat:</p>
+        <p><strong>Email:</strong> <a href="mailto:support@neirostat.ru">support@neirostat.ru</a></p>
+        
+        <h2>🤝 Сотрудничество и реклама</h2>
+        <p>Предложения по интеграции, партнёрству, размещению рекламы:</p>
+        <p><strong>Email:</strong> <a href="mailto:partners@neirostat.ru">partners@neirostat.ru</a></p>
+        
+        <h2>💡 Предложить идею</h2>
+        <p>У вас есть идея новой функции или формата? Напишите нам:</p>
+        <p><strong>Email:</strong> <a href="mailto:ideas@neirostat.ru">ideas@neirostat.ru</a></p>
+        
+        <h2>📰 Для СМИ и прессы</h2>
+        <p>По вопросам интервью, пресс-релизов и публикаций:</p>
+        <p><strong>Email:</strong> <a href="mailto:press@neirostat.ru">press@neirostat.ru</a></p>
+        
+        <h2>📱 Социальные сети</h2>
+        <p>Следите за новостями и обновлениями:</p>
+        <p>
+            <a href="https://t.me/neirostat" target="_blank">📨 Telegram-канал</a><br>
+            <a href="https://twitter.com/neirostat" target="_blank">🐦 X (Twitter)</a>
+        </p>
+        
+        <h2>❓ Часто задаваемые вопросы (FAQ)</h2>
+        
+        <p><strong>❓ Нужно ли регистрироваться?</strong><br>Нет, Neirostat работает без регистрации и полностью бесплатно.</p>
+        
+        <p><strong>❓ Сколько генераций можно сделать?</strong><br>Пока безлимит. В будущем могут появиться ограничения на бесплатном тарифе, но первые генерации всегда будут бесплатными.</p>
+        
+        <p><strong>❓ Какой ИИ используется?</strong><br>Мы используем GPT-4o-mini через GitHub Models — быстро и качественно.</p>
+        
+        <p><strong>❓ Можно ли использовать тексты в коммерческих целях?</strong><br>Да. Все сгенерированные тексты принадлежат вам.</p>
+        
+        <p><strong>❓ Будут ли платные тарифы?</strong><br>В будущем — возможно. Но бесплатный функционал останется.</p>
+        
+        <hr>
+        
+        <p><strong>📌 Ответ обычно приходит в течение 24 часов.</strong> Спасибо, что пользуетесь Neirostat! 💙</p>
     </div>
 </div>
 {% endblock %}
