@@ -126,11 +126,10 @@
 
 {% block extra_scripts %}
 <script>
-    // Максимально простой переключатель языков
+    // Переключатель языков
     const langButtons = document.querySelectorAll('.lang-btn');
     let currentLang = localStorage.getItem('lang') || 'ru';
     
-    // Только основные переводы
     const texts = {
         ru: {
             home: 'Главная',
@@ -156,7 +155,6 @@
         currentLang = lang;
         localStorage.setItem('lang', lang);
         
-        // Обновляем активные кнопки
         document.querySelectorAll('.lang-btn').forEach(btn => {
             if (btn.dataset.lang === lang) {
                 btn.classList.add('active');
@@ -165,17 +163,15 @@
             }
         });
         
-        // Обновляем заголовок и подзаголовок
         const headerH1 = document.querySelector('.site-header h1');
         const headerP = document.querySelector('.site-header .subtitle');
         if (headerH1) headerH1.textContent = texts[lang].title;
         if (headerP) headerP.textContent = texts[lang].subtitle;
         
-        // Обновляем ссылки в навигации
         const navLinks = document.querySelectorAll('.desktop-nav a, .mobile-menu a');
         navLinks.forEach(link => {
             const href = link.getAttribute('href');
-            if (href === '/' || href === '/index') link.textContent = texts[lang].home;
+            if (href === '/' || href === '') link.textContent = texts[lang].home;
             if (href === '/about') link.textContent = texts[lang].about;
             if (href === '/contacts') link.textContent = texts[lang].contacts;
             if (href === '/privacy') link.textContent = texts[lang].privacy;
@@ -185,14 +181,13 @@
         console.log('Language changed to:', lang);
     }
     
-    // Навешиваем обработчики
-    langButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            switchLang(btn.dataset.lang);
+    if (langButtons.length > 0) {
+        langButtons.forEach(btn => {
+            btn.addEventListener('click', () => switchLang(btn.dataset.lang));
         });
-    });
-    
-    // Применяем сохранённый язык
-    switchLang(currentLang);
+        switchLang(currentLang);
+    } else {
+        console.log('Кнопки языков не найдены');
+    }
 </script>
 {% endblock %}
