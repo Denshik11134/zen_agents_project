@@ -80,11 +80,15 @@
 <!-- Десктопное меню (видно на компьютере) -->
 <nav class="site-nav desktop-nav">
     <div class="nav-inner">
-        <a href="{{ url_for('index') }}" class="{% if request.path == '/' %}active{% endif %}">Главная</a>
-        <a href="{{ url_for('about') }}" class="{% if request.path == '/about' %}active{% endif %}">О проекте</a>
-        <a href="{{ url_for('contacts') }}" class="{% if request.path == '/contacts' %}active{% endif %}">Контакты</a>
-        <a href="{{ url_for('privacy') }}" class="{% if request.path == '/privacy' %}active{% endif %}">Конфиденциальность</a>
-        <a href="{{ url_for('terms') }}" class="{% if request.path == '/terms' %}active{% endif %}">Условия</a>
+        <a href="{{ url_for('index') }}" data-key="nav_home">Главная</a>
+        <a href="{{ url_for('about') }}" data-key="nav_about">О проекте</a>
+        <a href="{{ url_for('contacts') }}" data-key="nav_contacts">Контакты</a>
+        <a href="{{ url_for('privacy') }}" data-key="nav_privacy">Конфиденциальность</a>
+        <a href="{{ url_for('terms') }}" data-key="nav_terms">Условия</a>
+        <div class="lang-switcher">
+            <button class="lang-btn active" data-lang="ru">🇷🇺 RU</button>
+            <button class="lang-btn" data-lang="en">🇬🇧 EN</button>
+        </div>
     </div>
 </nav>
 
@@ -92,11 +96,15 @@
 <div class="mobile-nav">
     <button class="hamburger" id="hamburger-btn" onclick="toggleMenu()">☰</button>
     <div class="mobile-menu" id="mobile-menu">
-        <a href="{{ url_for('index') }}">Главная</a>
-        <a href="{{ url_for('about') }}">О проекте</a>
-        <a href="{{ url_for('contacts') }}">Контакты</a>
-        <a href="{{ url_for('privacy') }}">Конфиденциальность</a>
-        <a href="{{ url_for('terms') }}">Условия</a>
+        <div class="lang-switcher-mobile">
+            <button class="lang-btn active" data-lang="ru">🇷🇺 RU</button>
+            <button class="lang-btn" data-lang="en">🇬🇧 EN</button>
+        </div>
+        <a href="{{ url_for('index') }}" data-key="nav_home">Главная</a>
+        <a href="{{ url_for('about') }}" data-key="nav_about">О проекте</a>
+        <a href="{{ url_for('contacts') }}" data-key="nav_contacts">Контакты</a>
+        <a href="{{ url_for('privacy') }}" data-key="nav_privacy">Конфиденциальность</a>
+        <a href="{{ url_for('terms') }}" data-key="nav_terms">Условия</a>
     </div>
 </div>
 

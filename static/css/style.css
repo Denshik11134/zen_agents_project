@@ -884,3 +884,40 @@ img {
         display: flex !important;
     }
 }
+/* Переключатель языков */
+.lang-switcher {
+    display: inline-flex;
+    gap: 4px;
+    margin-left: 15px;
+}
+
+.lang-switcher-mobile {
+    display: flex;
+    gap: 8px;
+    padding: 12px 20px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.lang-btn {
+    background: none;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.lang-btn.active {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
+.lang-btn:hover {
+    background: #e9ecef;
+}
+
+.lang-btn.active:hover {
+    background: #5a67d8;
+}
