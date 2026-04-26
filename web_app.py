@@ -3,7 +3,7 @@ import time
 import threading
 from datetime import datetime
 from pathlib import Path
-from flask import Flask, render_template, request, jsonify, Response
+from flask import Flask, render_template, request, jsonify, Response, send_from_directory
 from github_writer import generate_article
 
 app = Flask(__name__)
