@@ -126,97 +126,73 @@
 
 {% block extra_scripts %}
 <script>
+    // Максимально простой переключатель языков
     const langButtons = document.querySelectorAll('.lang-btn');
     let currentLang = localStorage.getItem('lang') || 'ru';
     
-    const translations = {
+    // Только основные переводы
+    const texts = {
         ru: {
-            nav_home: 'Главная',
-            nav_about: 'О проекте',
-            nav_contacts: 'Контакты',
-            nav_privacy: 'Конфиденциальность',
-            nav_terms: 'Условия',
+            home: 'Главная',
+            about: 'О проекте',
+            contacts: 'Контакты',
+            privacy: 'Конфиденциальность',
+            terms: 'Условия',
             title: 'Генератор статей',
-            subtitle: 'Создание качественных текстов с помощью искусственного интеллекта',
-            topic_label: 'Тема статьи (обязательно)',
-            topic_placeholder: 'Введите тему статьи',
-            topic_hint: 'Пожалуйста, введите тему статьи',
-            generate_btn: 'Сгенерировать',
-            copy_btn: '📋 Скопировать',
-            download_btn: '⬇ Скачать (.md)',
-            share_btn: '📤 Поделиться',
-            details_placeholder: 'Например: 3 функции, 5 насадок, ионизация, быстрая сушка',
-            examples_label: '📌 Попробуйте примеры:',
-            examples_hint: '✨ Нажмите на кнопку — тема подставится автоматически',
-            format_label: 'Формат:',
-            style_label: 'Стиль / Тон:'
+            subtitle: 'Создание качественных текстов с помощью искусственного интеллекта'
         },
         en: {
-            nav_home: 'Home',
-            nav_about: 'About',
-            nav_contacts: 'Contacts',
-            nav_privacy: 'Privacy',
-            nav_terms: 'Terms',
+            home: 'Home',
+            about: 'About',
+            contacts: 'Contacts',
+            privacy: 'Privacy',
+            terms: 'Terms',
             title: 'Content Generator',
-            subtitle: 'Create quality content using artificial intelligence',
-            topic_label: 'Topic (required)',
-            topic_placeholder: 'Enter your topic',
-            topic_hint: 'Please enter the topic',
-            generate_btn: 'Generate',
-            copy_btn: '📋 Copy',
-            download_btn: '⬇ Download (.md)',
-            share_btn: '📤 Share',
-            details_placeholder: 'For example: 3 modes, 5 attachments, ionization, fast drying',
-            examples_label: '📌 Try examples:',
-            examples_hint: '✨ Click the button — the topic will be filled automatically',
-            format_label: 'Format:',
-            style_label: 'Style / Tone:'
+            subtitle: 'Create quality content using artificial intelligence'
         }
     };
     
-    function switchLanguage(lang) {
+    function switchLang(lang) {
         currentLang = lang;
         localStorage.setItem('lang', lang);
         
+        // Обновляем активные кнопки
         document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.lang === lang);
+            if (btn.dataset.lang === lang) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
         });
         
-        document.querySelectorAll('[data-key]').forEach(el => {
-            const key = el.dataset.key;
-            if (translations[lang][key]) el.textContent = translations[lang][key];
+        // Обновляем заголовок и подзаголовок
+        const headerH1 = document.querySelector('.site-header h1');
+        const headerP = document.querySelector('.site-header .subtitle');
+        if (headerH1) headerH1.textContent = texts[lang].title;
+        if (headerP) headerP.textContent = texts[lang].subtitle;
+        
+        // Обновляем ссылки в навигации
+        const navLinks = document.querySelectorAll('.desktop-nav a, .mobile-menu a');
+        navLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            if (href === '/' || href === '/index') link.textContent = texts[lang].home;
+            if (href === '/about') link.textContent = texts[lang].about;
+            if (href === '/contacts') link.textContent = texts[lang].contacts;
+            if (href === '/privacy') link.textContent = texts[lang].privacy;
+            if (href === '/terms') link.textContent = texts[lang].terms;
         });
         
-        const h1 = document.querySelector('.site-header h1');
-        const subtitle = document.querySelector('.site-header .subtitle');
-        if (h1) h1.textContent = translations[lang].title;
-        if (subtitle) subtitle.textContent = translations[lang].subtitle;
-        
-        const topicInput = document.getElementById('topic-input');
-        if (topicInput) topicInput.placeholder = translations[lang].topic_placeholder;
-        
-        const detailsInput = document.getElementById('details-input');
-        if (detailsInput) detailsInput.placeholder = translations[lang].details_placeholder;
-        
-        const topicLabel = document.querySelector('label[for="topic-input"]');
-        if (topicLabel) {
-            const span = topicLabel.querySelector('#topic-label-text');
-            if (span) span.textContent = translations[lang].topic_label;
-        }
-        
-        const formatLabel = document.querySelector('label[for="format-select"]');
-        if (formatLabel) formatLabel.textContent = translations[lang].format_label;
-        
-        const styleLabel = document.querySelector('label[for="style-select"]');
-        if (styleLabel) styleLabel.textContent = translations[lang].style_label;
-        
-        console.log('Language switched to:', lang);
+        console.log('Language changed to:', lang);
     }
     
+    // Навешиваем обработчики
     langButtons.forEach(btn => {
-        btn.addEventListener('click', () => switchLanguage(btn.dataset.lang));
+        btn.addEventListener('click', () => {
+            switchLang(btn.dataset.lang);
+        });
     });
     
-    switchLanguage(currentLang);
+    // Применяем сохранённый язык
+    switchLang(currentLang);
 </script>
 {% endblock %}
