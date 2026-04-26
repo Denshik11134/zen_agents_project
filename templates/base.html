@@ -39,6 +39,35 @@
     <!-- /Yandex.Metrika counter -->
     <!-- 🔴 КОНЕЦ КОДА МЕТРИКИ 🔴 -->
     {% endblock %}
+    <!-- Schema.org разметка -->
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Neirostat",
+    "url": "https://neirostat.ru",
+    "description": "Neirostat — free AI content generator. Generate articles, social media posts, X threads, video scripts, ad posts. No registration required.",
+    "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://neirostat.ru/?topic={search_term_string}",
+        "query-input": "required name=search_term_string"
+    }
+}
+</script>
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Neirostat",
+    "url": "https://neirostat.ru",
+    "logo": "https://neirostat.ru/static/logo.png",
+    "sameAs": [
+        "https://t.me/neirostat",
+        "https://twitter.com/neirostat"
+    ]
+}
+</script>
 </head>
 <body>
 
@@ -109,5 +138,22 @@
     });
 </script>
 {% block extra_scripts %}{% endblock %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Neirostat AI Content Generator",
+    "url": "https://neirostat.ru",
+    "description": "Free AI generator for articles, social posts, threads, video scripts, ad posts",
+    "applicationCategory": "Multimedia",
+    "operatingSystem": "Any",
+    "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+    },
+    "featureList": "Article generation, social media posts, X threads, video scripts, ad posts, 4 writing styles"
+}
+</script>
 </body>
 </html>
