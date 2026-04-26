@@ -95,6 +95,18 @@
             menu.style.display = 'flex';
         }
     }
+    
+    // Закрытие меню при клике вне его
+    document.addEventListener('click', function(event) {
+        var menu = document.getElementById('mobile-menu');
+        var hamburger = document.getElementById('hamburger-btn');
+        
+        if (menu && hamburger && menu.style.display === 'flex') {
+            if (!menu.contains(event.target) && !hamburger.contains(event.target)) {
+                menu.style.display = 'none';
+            }
+        }
+    });
 </script>
 {% block extra_scripts %}{% endblock %}
 </body>
