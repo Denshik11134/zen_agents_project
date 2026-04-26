@@ -170,6 +170,14 @@ def stream(job_id: str):
 def internal_error(error):
     return jsonify({"error": "Внутренняя ошибка сервера"}), 500
 
+@app.route('/sitemap.xml')
+def sitemap():
+    return send_from_directory('.', 'sitemap.xml')
+
+@app.route('/robots.txt')
+def robots():
+    return send_from_directory('.', 'robots.txt')
+
 if __name__ == "__main__":
     print("=" * 50)
     print("  Генератор контента — neirostat.ru")
