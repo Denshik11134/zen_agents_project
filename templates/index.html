@@ -66,10 +66,10 @@
             </select>
         </div>
 
-        <button type="submit" class="btn-primary" id="submit-btn">
-            <span id="btn-text">Сгенерировать</span>
-            <span id="btn-spinner" class="spinner" style="display:none"></span>
-        </button>
+<button type="submit" class="btn-primary" id="submit-btn">
+    <span id="btn-text" data-key="generate_btn">Сгенерировать</span>
+    <span id="btn-spinner" class="spinner" style="display:none"></span>
+</button>
     </form>
 </div>
 
@@ -126,415 +126,97 @@
 
 {% block extra_scripts %}
 <script>
-(function () {
-    const form = document.getElementById('generate-form');
-    const topicInput = document.getElementById('topic-input');
-    const submitBtn = document.getElementById('submit-btn');
-    const btnText = document.getElementById('btn-text');
-    const btnSpinner = document.getElementById('btn-spinner');
-    const logsCard = document.getElementById('logs-card');
-    const logsContainer = document.getElementById('logs-container');
-    const statusBadge = document.getElementById('status-badge');
-    const resultSection = document.getElementById('result-section');
-    const resultTopic = document.getElementById('result-topic');
-    const resultFilename = document.getElementById('result-filename');
-    const articleEditor = document.getElementById('article-editor');
-    const copyBtn = document.getElementById('copy-btn');
-    const downloadBtn = document.getElementById('download-btn');
-    const formatSelect = document.getElementById('format-select');
-    const styleGroup = document.getElementById('style-group');
-    // Кнопки-примеры с красивым эффектом
-const exampleButtons = document.querySelectorAll('.btn-example');
-exampleButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-        const topicText = btn.getAttribute('data-topic');
-        const inputField = document.getElementById('topic-input');
-        
-        // Вставляем текст
-        inputField.value = topicText;
-        
-        // Эффект подсветки зелёным
-        inputField.style.transition = 'background-color 0.3s';
-        inputField.style.backgroundColor = '#d4edda';
-        setTimeout(() => {
-            inputField.style.backgroundColor = '';
-        }, 500);
-        
-        // Фокус на поле
-        inputField.focus();
-        
-        // Эффект нажатия на кнопку
-        btn.style.transform = 'scale(0.98)';
-        setTimeout(() => {
-            btn.style.transform = '';
-        }, 150);
-    });
-});
-// Конфигурация подписей для каждого формата
-const formatConfig = {
-    article: {
-        label: 'Тема статьи',
-        placeholder: 'Введите тему статьи'
-    },
-    social_post: {
-        label: 'О чём пост?',
-        placeholder: 'Например: как правильно питаться, мотивация на утро'
-    },
-    ad_post: {
-        label: 'Что продаём?',
-        placeholder: 'Например: фен для волос, курс по английскому'
-    },
-    twitter_thread: {
-        label: 'Тема треда',
-        placeholder: 'Например: как я начал бегать, 5 советов по финансам'
-    },
-    video_script: {
-        label: 'О чём видео?',
-        placeholder: 'Например: обзор iPhone, рецепт пиццы'
-    }
-};
-
-function updateTopicField() {
-    const format = formatSelect.value;
-    const config = formatConfig[format];
-    if (config) {
-        const labelSpan = document.getElementById('topic-label-text');
-        if (labelSpan) labelSpan.textContent = config.label;
-        const inputEl = document.getElementById('topic-input');
-        if (inputEl) inputEl.placeholder = config.placeholder;
-    }
-}
-    let currentEventSource = null;
-    let currentArticleFilename = '';
-
-function toggleStyleGroup() {
-    const format = formatSelect.value;
-    const showForFormats = ['social_post', 'ad_post', 'video_script'];
-    if (showForFormats.includes(format)) {
-        styleGroup.style.display = 'block';
-    } else {
-        styleGroup.style.display = 'none';
-    }
-}
-
-function toggleDetailsGroup() {
-    const format = formatSelect.value;
-    const showDetailsFor = ['ad_post'];  // только для продающего поста
-    const detailsGroup = document.getElementById('details-group');
-    if (showDetailsFor.includes(format)) {
-        detailsGroup.style.display = 'block';
-    } else {
-        detailsGroup.style.display = 'none';
-    }
-}
-
-formatSelect.addEventListener('change', () => {
-    toggleStyleGroup();
-    toggleDetailsGroup();
-    updateTopicField();   // ← ДОБАВИТЬ ЭТУ СТРОКУ
-});
-
-toggleStyleGroup();
-toggleDetailsGroup();
-updateTopicField();
-function setBusy(busy) {
-    submitBtn.disabled = busy;
-    btnText.textContent = busy ? 'Генерация…' : 'Сгенерировать';
-    btnSpinner.style.display = busy ? 'inline-block' : 'none';
-}
-
-function closeSSE() {
-    if (currentEventSource) {
-        currentEventSource.close();
-        currentEventSource = null;
-    }
-}
-
-function appendLog(text) {
-    const isError = text.includes('ERROR');
-    const div = document.createElement('div');
-    div.className = 'log-line' + (isError ? ' log-error' : '');
-    div.textContent = text;
-    logsContainer.appendChild(div);
-    logsContainer.scrollTop = logsContainer.scrollHeight;
-}
-
-form.addEventListener('submit', async function (e) {
-    e.preventDefault();
-    closeSSE();
-
-        const topic = topicInput.value.trim();
-        if (!topic) {
-            appendLog("❌ Ошибка: введите тему статьи");
-            statusBadge.className = 'badge badge-error';
-            statusBadge.textContent = 'Ошибка ✗';
-            logsCard.style.display = 'block';
-            setBusy(false);
-            return;
+    const langButtons = document.querySelectorAll('.lang-btn');
+    let currentLang = localStorage.getItem('lang') || 'ru';
+    
+    const translations = {
+        ru: {
+            nav_home: 'Главная',
+            nav_about: 'О проекте',
+            nav_contacts: 'Контакты',
+            nav_privacy: 'Конфиденциальность',
+            nav_terms: 'Условия',
+            title: 'Генератор статей',
+            subtitle: 'Создание качественных текстов с помощью искусственного интеллекта',
+            topic_label: 'Тема статьи (обязательно)',
+            topic_placeholder: 'Введите тему статьи',
+            topic_hint: 'Пожалуйста, введите тему статьи',
+            generate_btn: 'Сгенерировать',
+            copy_btn: '📋 Скопировать',
+            download_btn: '⬇ Скачать (.md)',
+            share_btn: '📤 Поделиться',
+            details_placeholder: 'Например: 3 функции, 5 насадок, ионизация, быстрая сушка',
+            examples_label: '📌 Попробуйте примеры:',
+            examples_hint: '✨ Нажмите на кнопку — тема подставится автоматически',
+            format_label: 'Формат:',
+            style_label: 'Стиль / Тон:'
+        },
+        en: {
+            nav_home: 'Home',
+            nav_about: 'About',
+            nav_contacts: 'Contacts',
+            nav_privacy: 'Privacy',
+            nav_terms: 'Terms',
+            title: 'Content Generator',
+            subtitle: 'Create quality content using artificial intelligence',
+            topic_label: 'Topic (required)',
+            topic_placeholder: 'Enter your topic',
+            topic_hint: 'Please enter the topic',
+            generate_btn: 'Generate',
+            copy_btn: '📋 Copy',
+            download_btn: '⬇ Download (.md)',
+            share_btn: '📤 Share',
+            details_placeholder: 'For example: 3 modes, 5 attachments, ionization, fast drying',
+            examples_label: '📌 Try examples:',
+            examples_hint: '✨ Click the button — the topic will be filled automatically',
+            format_label: 'Format:',
+            style_label: 'Style / Tone:'
         }
-
-        const format = formatSelect.value;
-const style = styleGroup.style.display !== 'none' ? document.getElementById('style-select').value : 'neutral';
-const details = document.getElementById('details-input').value;
-
-logsContainer.innerHTML = '';
-resultSection.style.display = 'none';
-logsCard.style.display = 'block';
-statusBadge.className = 'badge badge-running';
-statusBadge.textContent = 'Выполняется…';
-setBusy(true);
-
-try {
-    const resp = await fetch('/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-            topic: topic, 
-            format: format,
-            style: style,
-            details: details
-        })
-    });
-    const data = await resp.json();
-    const jobId = data.job_id;
-            currentEventSource = new EventSource('/stream/' + jobId);
-            currentEventSource.onmessage = function (e) {
-                const msg = e.data;
-                if (msg.startsWith('__STATUS__:')) {
-                    const status = msg.replace('__STATUS__:', '');
-                    if (status === 'done') {
-                        statusBadge.className = 'badge badge-done';
-                        statusBadge.textContent = 'Готово ✓';
-                        appendLog('✅ Генерация завершена!');
-                        loadResult(jobId);
-                    } else if (status === 'error') {
-                        statusBadge.className = 'badge badge-error';
-                        statusBadge.textContent = 'Ошибка ✗';
-                        appendLog('❌ Произошла ошибка при генерации.');
-                        setBusy(false);
-                    }
-                    closeSSE();
-                } else {
-                    appendLog(msg);
-                }
-            };
-            currentEventSource.onerror = function () {
-                closeSSE();
-                pollStatus(jobId);
-            };
-        } catch (err) {
-            appendLog('ERROR: ' + err.message);
-            statusBadge.className = 'badge badge-error';
-            statusBadge.textContent = 'Ошибка ✗';
-            setBusy(false);
-        }
-    });
-
-    async function pollStatus(jobId) {
-        try {
-            const resp = await fetch('/status/' + jobId);
-            const data = await resp.json();
-            const existingCount = logsContainer.children.length;
-            data.logs.slice(existingCount).forEach(l => appendLog(l));
-            if (data.status === 'done') {
-                statusBadge.className = 'badge badge-done';
-                statusBadge.textContent = 'Готово ✓';
-                loadResultFromData(data.result);
-            } else if (data.status === 'error') {
-                statusBadge.className = 'badge badge-error';
-                statusBadge.textContent = 'Ошибка ✗';
-            }
-            setBusy(false);
-        } catch (_) {
-            setBusy(false);
-        }
-    }
-
-    async function loadResult(jobId) {
-        try {
-            const resp = await fetch('/status/' + jobId);
-            const data = await resp.json();
-            if (data.result) {
-                loadResultFromData(data.result);
-            }
-        } catch (_) {}
-        setBusy(false);
-    }
-
-    function loadResultFromData(result) {
-        if (!result) return;
-        resultSection.style.display = 'block';
-        resultTopic.textContent = result.topic;
-        resultFilename.textContent = 'Файл: ' + result.filename;
-        articleEditor.value = result.article;
-        currentArticleFilename = result.filename || 'article.md';
-        resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        // Сохраняем в историю
-const formatText = formatSelect.options[formatSelect.selectedIndex]?.text || 'текст';
-addToHistory(result.topic, result.article, formatText);
-    }
-
-    copyBtn.addEventListener('click', async function () {
-        const text = articleEditor.value;
-        try {
-            await navigator.clipboard.writeText(text);
-            copyBtn.textContent = '✅ Скопировано!';
-            setTimeout(() => { copyBtn.textContent = '📋 Скопировать'; }, 2000);
-        } catch (err) {
-            copyBtn.textContent = '❌ Ошибка';
-            setTimeout(() => { copyBtn.textContent = '📋 Скопировать'; }, 2000);
-        }
-    });
-
-    downloadBtn.addEventListener('click', function () {
-        const text = articleEditor.value;
-        const blob = new Blob([text], { type: 'text/markdown;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = currentArticleFilename;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    });
-    // Сворачивание логов
-const toggleLogsBtn = document.getElementById('toggle-logs-btn');
-const logsContainerElem = document.getElementById('logs-container');
-let logsVisible = true;
-
-if (toggleLogsBtn) {
-    toggleLogsBtn.addEventListener('click', () => {
-        if (logsVisible) {
-            logsContainerElem.style.display = 'none';
-            toggleLogsBtn.textContent = '▶ Развернуть';
-            logsVisible = false;
-        } else {
-            logsContainerElem.style.display = 'block';
-            toggleLogsBtn.textContent = '▼ Свернуть';
-            logsVisible = true;
-        }
-    });
-}
-// ========== ИСТОРИЯ ГЕНЕРАЦИЙ (localStorage) ==========
-const STORAGE_KEY = 'neirostat_history';
-const MAX_HISTORY = 10;
-
-function getHistory() {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    return stored ? JSON.parse(stored) : [];
-}
-
-function saveHistory(history) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(history.slice(0, MAX_HISTORY)));
-}
-
-function addToHistory(topic, article, format) {
-    console.log('addToHistory вызвана, article длина:', article ? article.length : 'пусто');
-    const history = getHistory();
-    const newItem = {
-        id: Date.now(),
-        topic: topic,
-        article: article,
-        format: format,
-        date: new Date().toLocaleString()
     };
-    history.unshift(newItem);
-    saveHistory(history);
-    renderHistory();
-}
-
-function renderHistory() {
-    const history = getHistory();
-    const container = document.getElementById('history-list');
-    if (!container) return;
-
-    if (history.length === 0) {
-        container.innerHTML = '<div class="history-empty">История пуста. Сгенерируйте текст — он появится здесь.</div>';
-        return;
-    }
-
-    container.innerHTML = history.map(item => `
-        <div class="history-item" data-id="${item.id}">
-            <div class="history-item-title">${escapeHtml(item.topic)}</div>
-            <div class="history-item-meta">${item.format} | ${item.date}</div>
-        </div>
-    `).join('');
-
-    document.querySelectorAll('.history-item').forEach(el => {
-        el.addEventListener('click', () => {
-            const id = parseInt(el.dataset.id);
-            const item = history.find(h => h.id === id);
-            if (item) {
-                document.getElementById('article-editor').value = item.article;
-                document.getElementById('result-topic').textContent = item.topic;
-                document.getElementById('result-section').style.display = 'block';
-            }
+    
+    function switchLanguage(lang) {
+        currentLang = lang;
+        localStorage.setItem('lang', lang);
+        
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.lang === lang);
         });
-    });
-}
-
-function escapeHtml(str) {
-    return str.replace(/[&<>]/g, function(m) {
-        if (m === '&') return '&amp;';
-        if (m === '<') return '&lt;';
-        if (m === '>') return '&gt;';
-        return m;
-    });
-}
-
-// Очистка истории
-const clearBtn = document.getElementById('clear-history-btn');
-if (clearBtn) {
-    clearBtn.addEventListener('click', () => {
-        if (confirm('Удалить всю историю генераций?')) {
-            localStorage.removeItem(STORAGE_KEY);
-            renderHistory();
-        }
-    });
-}
-
-// ========== ПОДЕЛИТЬСЯ (с поддержкой телефонов) ==========
-const shareBtn = document.getElementById('share-btn');
-if (shareBtn) {
-    shareBtn.addEventListener('click', async () => {
-        const articleText = articleEditor.value;
-        const topic = resultTopic.textContent || 'сгенерированный текст';
         
-        if (!articleText) {
-            alert('Сначала сгенерируйте текст');
-            return;
+        document.querySelectorAll('[data-key]').forEach(el => {
+            const key = el.dataset.key;
+            if (translations[lang][key]) el.textContent = translations[lang][key];
+        });
+        
+        const h1 = document.querySelector('.site-header h1');
+        const subtitle = document.querySelector('.site-header .subtitle');
+        if (h1) h1.textContent = translations[lang].title;
+        if (subtitle) subtitle.textContent = translations[lang].subtitle;
+        
+        const topicInput = document.getElementById('topic-input');
+        if (topicInput) topicInput.placeholder = translations[lang].topic_placeholder;
+        
+        const detailsInput = document.getElementById('details-input');
+        if (detailsInput) detailsInput.placeholder = translations[lang].details_placeholder;
+        
+        const topicLabel = document.querySelector('label[for="topic-input"]');
+        if (topicLabel) {
+            const span = topicLabel.querySelector('#topic-label-text');
+            if (span) span.textContent = translations[lang].topic_label;
         }
         
-        const shareTitle = 'Neirostat — генератор контента';
-        const shareText = `Сгенерировал контент на тему "${topic}" с помощью Neirostat`;
-        const shareUrl = 'https://neirostat.ru';
+        const formatLabel = document.querySelector('label[for="format-select"]');
+        if (formatLabel) formatLabel.textContent = translations[lang].format_label;
         
-        // Пробуем использовать Web Share API (для телефонов)
-        if (navigator.share) {
-            try {
-                await navigator.share({
-                    title: shareTitle,
-                    text: shareText,
-                    url: shareUrl
-                });
-                console.log('Поделились через систему');
-            } catch (err) {
-                if (err.name !== 'AbortError') {
-                    console.error('Ошибка шаринга:', err);
-                }
-            }
-        } else {
-            // На компьютере — копируем текст (как было)
-            const fullText = `${shareText}\n\n${articleText.substring(0, 500)}${articleText.length > 500 ? '…' : ''}\n\n✨ Попробуй сам: ${shareUrl}`;
-            navigator.clipboard.writeText(fullText).then(() => {
-                alert('✅ Текст скопирован! Теперь вы можете вставить его в пост, твит или сообщение.');
-            }).catch(() => {
-                alert('❌ Не удалось скопировать. Попробуйте вручную.');
-            });
-        }
+        const styleLabel = document.querySelector('label[for="style-select"]');
+        if (styleLabel) styleLabel.textContent = translations[lang].style_label;
+        
+        console.log('Language switched to:', lang);
+    }
+    
+    langButtons.forEach(btn => {
+        btn.addEventListener('click', () => switchLanguage(btn.dataset.lang));
     });
-}
-})();
+    
+    switchLanguage(currentLang);
 </script>
 {% endblock %}
