@@ -39,35 +39,6 @@
     <!-- /Yandex.Metrika counter -->
     <!-- 🔴 КОНЕЦ КОДА МЕТРИКИ 🔴 -->
     {% endblock %}
-    <!-- Schema.org разметка -->
-<script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Neirostat",
-    "url": "https://neirostat.ru",
-    "description": "Neirostat — free AI content generator. Generate articles, social media posts, X threads, video scripts, ad posts. No registration required.",
-    "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://neirostat.ru/?topic={search_term_string}",
-        "query-input": "required name=search_term_string"
-    }
-}
-</script>
-
-<script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "Neirostat",
-    "url": "https://neirostat.ru",
-    "logo": "https://neirostat.ru/static/logo.png",
-    "sameAs": [
-        "https://t.me/neirostat",
-        "https://twitter.com/neirostat"
-    ]
-}
-</script>
 </head>
 <body>
 
@@ -80,31 +51,23 @@
 <!-- Десктопное меню (видно на компьютере) -->
 <nav class="site-nav desktop-nav">
     <div class="nav-inner">
-        <a href="{{ url_for('index') }}" data-key="nav_home">Главная</a>
-        <a href="{{ url_for('about') }}" data-key="nav_about">О проекте</a>
-        <a href="{{ url_for('contacts') }}" data-key="nav_contacts">Контакты</a>
-        <a href="{{ url_for('privacy') }}" data-key="nav_privacy">Конфиденциальность</a>
-        <a href="{{ url_for('terms') }}" data-key="nav_terms">Условия</a>
-        <div class="lang-switcher">
-            <button class="lang-btn active" data-lang="ru">🇷🇺 RU</button>
-            <button class="lang-btn" data-lang="en">🇬🇧 EN</button>
-        </div>
+        <a href="{{ url_for('index') }}" class="{% if request.path == '/' %}active{% endif %}">Главная</a>
+        <a href="{{ url_for('about') }}" class="{% if request.path == '/about' %}active{% endif %}">О проекте</a>
+        <a href="{{ url_for('contacts') }}" class="{% if request.path == '/contacts' %}active{% endif %}">Контакты</a>
+        <a href="{{ url_for('privacy') }}" class="{% if request.path == '/privacy' %}active{% endif %}">Конфиденциальность</a>
+        <a href="{{ url_for('terms') }}" class="{% if request.path == '/terms' %}active{% endif %}">Условия</a>
     </div>
 </nav>
 
 <!-- Мобильное меню (гамбургер) -->
 <div class="mobile-nav">
-    <button class="hamburger" id="hamburger-btn" onclick="toggleMenu()">☰</button>
+    <button class="hamburger" id="hamburger-btn">☰</button>
     <div class="mobile-menu" id="mobile-menu">
-        <div class="lang-switcher-mobile">
-            <button class="lang-btn active" data-lang="ru">🇷🇺 RU</button>
-            <button class="lang-btn" data-lang="en">🇬🇧 EN</button>
-        </div>
-        <a href="{{ url_for('index') }}" data-key="nav_home">Главная</a>
-        <a href="{{ url_for('about') }}" data-key="nav_about">О проекте</a>
-        <a href="{{ url_for('contacts') }}" data-key="nav_contacts">Контакты</a>
-        <a href="{{ url_for('privacy') }}" data-key="nav_privacy">Конфиденциальность</a>
-        <a href="{{ url_for('terms') }}" data-key="nav_terms">Условия</a>
+        <a href="{{ url_for('index') }}">Главная</a>
+        <a href="{{ url_for('about') }}">О проекте</a>
+        <a href="{{ url_for('contacts') }}">Контакты</a>
+        <a href="{{ url_for('privacy') }}">Конфиденциальность</a>
+        <a href="{{ url_for('terms') }}">Условия</a>
     </div>
 </div>
 
@@ -123,261 +86,23 @@
     </div>
 </footer>
 
+{% block extra_scripts %}
 <script>
-    function toggleMenu() {
-        var menu = document.getElementById('mobile-menu');
-        if (menu.style.display === 'flex') {
-            menu.style.display = 'none';
-        } else {
-            menu.style.display = 'flex';
-        }
-    }
+    const hamburger = document.getElementById('hamburger-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
     
-    // Закрытие меню при клике вне его
-    document.addEventListener('click', function(event) {
-        var menu = document.getElementById('mobile-menu');
-        var hamburger = document.getElementById('hamburger-btn');
+    if (hamburger && mobileMenu) {
+        hamburger.addEventListener('click', () => {
+            mobileMenu.classList.toggle('show');
+        });
         
-        if (menu && hamburger && menu.style.display === 'flex') {
-            if (!menu.contains(event.target) && !hamburger.contains(event.target)) {
-                menu.style.display = 'none';
+        document.addEventListener('click', (e) => {
+            if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
+                mobileMenu.classList.remove('show');
             }
-        }
-    });
+        });
+    }
 </script>
-<script>
-    // Переключение языков (упрощённая версия)
-    const langButtons = document.querySelectorAll('.lang-btn');
-    let currentLang = localStorage.getItem('lang') || 'ru';
-    
-    // Простые переводы
-const translations = {
-    ru: {
-        nav_home: 'Главная',
-        nav_about: 'О проекте',
-        nav_contacts: 'Контакты',
-        nav_privacy: 'Конфиденциальность',
-        nav_terms: 'Условия',
-        title: 'Генератор статей',
-        subtitle: 'Создание качественных текстов с помощью искусственного интеллекта',
-        topic_label: 'Тема статьи (обязательно)',
-        topic_placeholder: 'Введите тему статьи',
-        topic_hint: 'Пожалуйста, введите тему статьи',
-        examples_label: '📌 Попробуйте примеры:',
-        examples_hint: '✨ Нажмите на кнопку — тема подставится автоматически',
-        details_label: 'Детали / особенности',
-        details_placeholder: 'Например: 3 функции, 5 насадок, ионизация, быстрая сушка',
-        details_hint: 'Опишите характеристики, преимущества или любые пожелания',
-        format_label: 'Формат:',
-        style_label: 'Стиль / Тон:',
-        generate_btn: 'Сгенерировать',
-        copy_btn: '📋 Скопировать',
-        download_btn: '⬇ Скачать (.md)',
-        share_btn: '📤 Поделиться',
-        logs_title: '📋 Процесс генерации',
-        history_title: '📜 История генераций',
-        history_empty: 'История пуста. Сгенерируйте текст — он появится здесь.',
-        history_clear: 'Очистить всё',
-        neutral: '📰 Нейтральный / Информационный',
-        expert: '🧠 Экспертный / Профессиональный',
-        friendly: '💬 Разговорный / Дружеский',
-        emotional: '🔥 Эмоциональный / Вдохновляющий',
-        about_title: 'О проекте Neirostat',
-        about_text1: 'Neirostat — это бесплатный AI-генератор контента, который помогает создавать качественные тексты за секунды. Никакой регистрации, никаких скрытых платежей.',
-        about_stats_title: '📊 Цифры, которые говорят сами за себя',
-        about_stats_1: '⚡ 5000+ символов сгенерировано пользователями',
-        about_stats_2: '✍️ 5 форматов контента: статьи, посты, треды, сценарии, реклама',
-        about_stats_3: '🎨 4 стиля текста: от нейтрального до эмоционального',
-        about_stats_4: '🌍 Пользователи из России, США, Германии, Франции, Польши',
-        about_audience_title: '💡 Кому подходит Neirostat',
-        about_how_title: '✨ Как это работает',
-        about_audience_1: '📱 SMM-специалистам — посты для соцсетей и треды за 10 секунд',
-        about_audience_2: '📝 Копирайтерам — черновики статей и продающих текстов',
-        about_audience_3: '🎥 Блогерам — сценарии для видео и Reels',
-        about_audience_4: '💼 Владельцам бизнеса — рекламные посты с УТП',
-        about_audience_5: '🧠 Маркетологам — контент-план на неделю за минуту',
-        contacts_title: '📬 Контакты',
-        contacts_support: '📧 По вопросам работы сервиса',
-        contacts_support_email: 'support@neirostat.ru',
-        contacts_partners: '🤝 Сотрудничество и реклама',
-        contacts_partners_email: 'partners@neirostat.ru',
-        contacts_ideas: '💡 Предложить идею',
-        contacts_ideas_email: 'ideas@neirostat.ru',
-        contacts_press: '📰 Для СМИ и прессы',
-        contacts_press_email: 'press@neirostat.ru',
-        contacts_social: '📱 Социальные сети',
-        contacts_faq: '❓ Часто задаваемые вопросы (FAQ)'
-    },
-    en: {
-        nav_home: 'Home',
-        nav_about: 'About',
-        nav_contacts: 'Contacts',
-        nav_privacy: 'Privacy',
-        nav_terms: 'Terms',
-        title: 'Content Generator',
-        subtitle: 'Create quality content using artificial intelligence',
-        topic_label: 'Topic (required)',
-        topic_placeholder: 'Enter your topic',
-        topic_hint: 'Please enter the topic',
-        examples_label: '📌 Try examples:',
-        examples_hint: '✨ Click the button — the topic will be filled automatically',
-        details_label: 'Details / features',
-        details_placeholder: 'For example: 3 modes, 5 attachments, ionization, fast drying',
-        details_hint: 'Describe features, benefits or any wishes',
-        format_label: 'Format:',
-        style_label: 'Style / Tone:',
-        generate_btn: 'Generate',
-        copy_btn: '📋 Copy',
-        download_btn: '⬇ Download (.md)',
-        share_btn: '📤 Share',
-        logs_title: '📋 Generation process',
-        history_title: '📜 Generation history',
-        history_empty: 'History is empty. Generate text and it will appear here.',
-        history_clear: 'Clear all',
-        neutral: '📰 Neutral / Informational',
-        expert: '🧠 Expert / Professional',
-        friendly: '💬 Friendly / Conversational',
-        emotional: '🔥 Emotional / Inspiring',
-        about_title: 'About Neirostat',
-        about_text1: 'Neirostat is a free AI content generator that helps create quality texts in seconds. No registration, no hidden fees.',
-        about_stats_title: '📊 Numbers that speak for themselves',
-        about_stats_1: '⚡ 5000+ characters generated by users',
-        about_stats_2: '✍️ 5 content formats: articles, posts, threads, scripts, ads',
-        about_stats_3: '🎨 4 writing styles: from neutral to emotional',
-        about_stats_4: '🌍 Users from Russia, USA, Germany, France, Poland',
-        about_audience_title: '💡 Who is Neirostat for',
-        about_how_title: '✨ How it works',
-        about_audience_1: '📱 For SMM specialists — social media posts and threads in 10 seconds',
-        about_audience_2: '📝 For copywriters — drafts of articles and sales texts',
-        about_audience_3: '🎥 For bloggers — scripts for videos and Reels',
-        about_audience_4: '💼 For business owners — ad posts with USP',
-        about_audience_5: '🧠 For marketers — content plan for the week in a minute',
-        contacts_title: '📬 Contacts',
-        contacts_support: '📧 Service questions',
-        contacts_support_email: 'support@neirostat.ru',
-        contacts_partners: '🤝 Partnerships and advertising',
-        contacts_partners_email: 'partners@neirostat.ru',
-        contacts_ideas: '💡 Suggest an idea',
-        contacts_ideas_email: 'ideas@neirostat.ru',
-        contacts_press: '📰 For media and press',
-        contacts_press_email: 'press@neirostat.ru',
-        contacts_social: '📱 Social networks',
-        contacts_faq: '❓ Frequently Asked Questions (FAQ)'
-    }
-};
-    
-function switchLanguage(lang) {
-    currentLang = lang;
-    localStorage.setItem('lang', lang);
-    
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-        if (btn.dataset.lang === lang) {
-            btn.classList.add('active');
-        } else {
-            btn.classList.remove('active');
-        }
-    });
-    
-    document.querySelectorAll('[data-key]').forEach(el => {
-        const key = el.dataset.key;
-        if (translations[lang][key]) {
-            el.textContent = translations[lang][key];
-        }
-    });
-    
-    const h1 = document.querySelector('.site-header h1');
-    const p = document.querySelector('.site-header .subtitle');
-    if (h1) h1.textContent = translations[lang].title;
-    if (p) p.textContent = translations[lang].subtitle;
-    
-    const topicInput = document.getElementById('topic-input');
-    if (topicInput) topicInput.placeholder = translations[lang].topic_placeholder;
-    
-    const detailsInput = document.getElementById('details-input');
-    if (detailsInput) detailsInput.placeholder = translations[lang].details_placeholder;
-    
-    const examplesLabel = document.querySelector('#examples-group > label');
-    if (examplesLabel) examplesLabel.textContent = translations[lang].examples_label;
-    
-    const examplesHint = document.querySelector('#examples-group .hint');
-    if (examplesHint) examplesHint.textContent = translations[lang].examples_hint;
-    
-    const detailsLabel = document.querySelector('#details-group > label');
-    if (detailsLabel) {
-        const span = detailsLabel.querySelector('span');
-        if (span) {
-            detailsLabel.childNodes[0].textContent = translations[lang].details_label + ' ';
-        } else {
-            detailsLabel.textContent = translations[lang].details_label;
-        }
-    }
-    
-    const detailsHint = document.querySelector('#details-group .hint');
-    if (detailsHint) detailsHint.textContent = translations[lang].details_hint;
-    
-    const formatLabel = document.querySelector('.form-group label[for="format-select"]');
-    if (formatLabel) formatLabel.textContent = translations[lang].format_label;
-    
-    const styleLabel = document.querySelector('.form-group label[for="style-select"]');
-    if (styleLabel) styleLabel.textContent = translations[lang].style_label;
-    
-    const logsTitle = document.querySelector('.logs-header h3');
-    if (logsTitle) logsTitle.textContent = translations[lang].logs_title;
-    
-    const historyTitle = document.querySelector('.history-header h3');
-    if (historyTitle) historyTitle.textContent = translations[lang].history_title;
-    
-    const historyClear = document.getElementById('clear-history-btn');
-    if (historyClear) historyClear.textContent = translations[lang].history_clear;
-    
-    const historyEmpty = document.querySelector('.history-empty');
-    if (historyEmpty) historyEmpty.textContent = translations[lang].history_empty;
-    
-    const styleSelect = document.getElementById('style-select');
-    if (styleSelect) {
-        const options = styleSelect.options;
-        if (options[0]) options[0].text = translations[lang].neutral;
-        if (options[1]) options[1].text = translations[lang].expert;
-        if (options[2]) options[2].text = translations[lang].friendly;
-        if (options[3]) options[3].text = translations[lang].emotional;
-    }
-    
-    const generateBtn = document.getElementById('submit-btn');
-    if (generateBtn) {
-        const btnText = generateBtn.querySelector('#btn-text');
-        if (btnText) btnText.textContent = translations[lang].generate_btn;
-    }
-    
-    console.log('Language switched to:', lang);
-}
-
-// Навешиваем обработчики
-langButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-        switchLanguage(btn.dataset.lang);
-    });
-});
-
-// Применяем язык при загрузке
-switchLanguage(currentLang);
-</script>
-{% block extra_scripts %}{% endblock %}
-<script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "Neirostat AI Content Generator",
-    "url": "https://neirostat.ru",
-    "description": "Free AI generator for articles, social posts, threads, video scripts, ad posts",
-    "applicationCategory": "Multimedia",
-    "operatingSystem": "Any",
-    "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-    },
-    "featureList": "Article generation, social media posts, X threads, video scripts, ad posts, 4 writing styles"
-}
-</script>
+{% endblock %}
 </body>
 </html>
