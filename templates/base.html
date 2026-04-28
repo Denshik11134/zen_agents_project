@@ -61,7 +61,7 @@
 
 <!-- Мобильное меню (гамбургер) -->
 <div class="mobile-nav">
-    <button class="hamburger" id="hamburger-btn">☰</button>
+    <button class="hamburger" id="hamburger-btn" onclick="var m=document.getElementById('mobile-menu'); m.style.display = m.style.display === 'flex' ? 'none' : 'flex'">☰</button>
     <div class="mobile-menu" id="mobile-menu">
         <a href="{{ url_for('index') }}">Главная</a>
         <a href="{{ url_for('about') }}">О проекте</a>
@@ -87,29 +87,7 @@
 </footer>
 
 {% block extra_scripts %}
-<script>
-    // Гамбургер-меню (рабочая версия)
-    const hamburger = document.getElementById('hamburger-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
-    
-    if (hamburger && mobileMenu) {
-        hamburger.addEventListener('click', function(e) {
-            e.stopPropagation();
-            if (mobileMenu.style.display === 'flex') {
-                mobileMenu.style.display = 'none';
-            } else {
-                mobileMenu.style.display = 'flex';
-            }
-        });
-        
-        // Закрытие при клике вне меню
-        document.addEventListener('click', function(event) {
-            if (!hamburger.contains(event.target) && !mobileMenu.contains(event.target)) {
-                mobileMenu.style.display = 'none';
-            }
-        });
-    }
-</script>
+<!-- Скрипт не нужен, всё в onclick -->
 {% endblock %}
 </body>
 </html>
