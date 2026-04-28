@@ -361,7 +361,80 @@ langButtons.forEach(btn => {
 // Применяем язык при загрузке
 switchLanguage(currentLang);
 </script>
-{% block extra_scripts %}{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Гамбургер-меню
+    function toggleMenu() {
+        var menu = document.getElementById('mobile-menu');
+        if (menu.style.display === 'flex') {
+            menu.style.display = 'none';
+        } else {
+            menu.style.display = 'flex';
+        }
+    }
+    
+    // Закрытие меню при клике вне его
+    document.addEventListener('click', function(event) {
+        var menu = document.getElementById('mobile-menu');
+        var hamburger = document.getElementById('hamburger-btn');
+        if (menu && hamburger && menu.style.display === 'flex') {
+            if (!menu.contains(event.target) && !hamburger.contains(event.target)) {
+                menu.style.display = 'none';
+            }
+        }
+    });
+    
+    // Кнопки-примеры
+    const exampleButtons = document.querySelectorAll('.btn-example');
+    exampleButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const topicText = btn.getAttribute('data-topic');
+            const inputField = document.getElementById('topic-input');
+            if (inputField) {
+                inputField.value = topicText;
+                inputField.style.backgroundColor = '#d4edda';
+                setTimeout(() => {
+                    inputField.style.backgroundColor = '';
+                }, 500);
+                inputField.focus();
+            }
+        });
+    });
+    
+    // Обработчик формы генерации
+    const generateForm = document.getElementById('generate-form');
+    if (generateForm) {
+        generateForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const topic = document.getElementById('topic-input').value.trim();
+            if (!topic) {
+                alert('Введите тему');
+                return;
+            }
+            
+            const format = document.getElementById('format-select').value;
+            const style = document.getElementById('style-group').style.display !== 'none' 
+                ? document.getElementById('style-select').value 
+                : 'neutral';
+            const details = document.getElementById('details-input') ? document.getElementById('details-input').value : '';
+            
+            fetch('/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ topic, format, style, details })
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log('Генерация запущена, job_id:', data.job_id);
+            })
+            .catch(err => console.error('Ошибка:', err));
+        });
+    }
+</script>
+{% endblock %}
+
 <script type="application/ld+json">
 {
     "@context": "https://schema.org",
