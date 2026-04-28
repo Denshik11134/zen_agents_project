@@ -151,81 +151,171 @@
     let currentLang = localStorage.getItem('lang') || 'ru';
     
     // Простые переводы
-    const translations = {
-        ru: {
-            nav_home: 'Главная',
-            nav_about: 'О проекте',
-            nav_contacts: 'Контакты',
-            nav_privacy: 'Конфиденциальность',
-            nav_terms: 'Условия',
-            title: 'Генератор статей',
-            subtitle: 'Создание качественных текстов с помощью искусственного интеллекта',
-            topic_placeholder: 'Введите тему статьи',
-            details_placeholder: 'Например: 3 функции, 5 насадок, ионизация, быстрая сушка',
-            generate_btn: 'Сгенерировать',
-            copy_btn: '📋 Скопировать',
-            download_btn: '⬇ Скачать (.md)',
-            share_btn: '📤 Поделиться'
-        },
-        en: {
-            nav_home: 'Home',
-            nav_about: 'About',
-            nav_contacts: 'Contacts',
-            nav_privacy: 'Privacy',
-            nav_terms: 'Terms',
-            title: 'Content Generator',
-            subtitle: 'Create quality content using artificial intelligence',
-            topic_placeholder: 'Enter topic',
-            details_placeholder: 'For example: 3 modes, 5 attachments, ionization, fast drying',
-            generate_btn: 'Generate',
-            copy_btn: '📋 Copy',
-            download_btn: '⬇ Download (.md)',
-            share_btn: '📤 Share'
-        }
-    };
+const translations = {
+    ru: {
+        nav_home: 'Главная',
+        nav_about: 'О проекте',
+        nav_contacts: 'Контакты',
+        nav_privacy: 'Конфиденциальность',
+        nav_terms: 'Условия',
+        title: 'Генератор статей',
+        subtitle: 'Создание качественных текстов с помощью искусственного интеллекта',
+        topic_label: 'Тема статьи (обязательно)',
+        topic_placeholder: 'Введите тему статьи',
+        topic_hint: 'Пожалуйста, введите тему статьи',
+        examples_label: '📌 Попробуйте примеры:',
+        examples_hint: '✨ Нажмите на кнопку — тема подставится автоматически',
+        details_label: 'Детали / особенности (необязательно)',
+        details_placeholder: 'Например: 3 функции, 5 насадок, ионизация, быстрая сушка',
+        details_hint: 'Опишите характеристики, преимущества или любые пожелания',
+        format_label: 'Формат:',
+        style_label: 'Стиль / Тон:',
+        generate_btn: 'Сгенерировать',
+        copy_btn: '📋 Скопировать',
+        download_btn: '⬇ Скачать (.md)',
+        share_btn: '📤 Поделиться',
+        logs_title: '📋 Процесс генерации',
+        history_title: '📜 История генераций',
+        history_empty: 'История пуста. Сгенерируйте текст — он появится здесь.',
+        history_clear: 'Очистить всё',
+        neutral: '📰 Нейтральный / Информационный',
+        expert: '🧠 Экспертный / Профессиональный',
+        friendly: '💬 Разговорный / Дружеский',
+        emotional: '🔥 Эмоциональный / Вдохновляющий'
+    },
+    en: {
+        nav_home: 'Home',
+        nav_about: 'About',
+        nav_contacts: 'Contacts',
+        nav_privacy: 'Privacy',
+        nav_terms: 'Terms',
+        title: 'Content Generator',
+        subtitle: 'Create quality content using artificial intelligence',
+        topic_label: 'Topic (required)',
+        topic_placeholder: 'Enter your topic',
+        topic_hint: 'Please enter the topic',
+        examples_label: '📌 Try examples:',
+        examples_hint: '✨ Click the button — the topic will be filled automatically',
+        details_label: 'Details / features (optional)',
+        details_placeholder: 'For example: 3 modes, 5 attachments, ionization, fast drying',
+        details_hint: 'Describe features, benefits or any wishes',
+        format_label: 'Format:',
+        style_label: 'Style / Tone:',
+        generate_btn: 'Generate',
+        copy_btn: '📋 Copy',
+        download_btn: '⬇ Download (.md)',
+        share_btn: '📤 Share',
+        logs_title: '📋 Generation process',
+        history_title: '📜 Generation history',
+        history_empty: 'History is empty. Generate text and it will appear here.',
+        history_clear: 'Clear all',
+        neutral: '📰 Neutral / Informational',
+        expert: '🧠 Expert / Professional',
+        friendly: '💬 Friendly / Conversational',
+        emotional: '🔥 Emotional / Inspiring'
+    }
+};
     
-    function switchLanguage(lang) {
-        currentLang = lang;
-        localStorage.setItem('lang', lang);
-        
-        // Обновляем кнопки
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            if (btn.dataset.lang === lang) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        });
-        
-        // Обновляем текст с data-key
-        document.querySelectorAll('[data-key]').forEach(el => {
-            const key = el.dataset.key;
-            if (translations[lang][key]) {
-                el.textContent = translations[lang][key];
-            }
-        });
-        
-        // Заголовок и подзаголовок
-        const h1 = document.querySelector('.site-header h1');
-        const p = document.querySelector('.site-header .subtitle');
-        if (h1) h1.textContent = translations[lang].title;
-        if (p) p.textContent = translations[lang].subtitle;
-        
-        // Поля ввода
-        const topicInput = document.getElementById('topic-input');
-        if (topicInput) topicInput.placeholder = translations[lang].topic_placeholder;
-        
-        const detailsInput = document.getElementById('details-input');
-        if (detailsInput) detailsInput.placeholder = translations[lang].details_placeholder;
-        
-        // Кнопки
-        const generateBtn = document.getElementById('submit-btn');
-        if (generateBtn) {
-            const btnText = generateBtn.querySelector('#btn-text');
-            if (btnText) btnText.textContent = translations[lang].generate_btn;
+function switchLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('lang', lang);
+    
+    // Обновляем кнопки
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        if (btn.dataset.lang === lang) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
         }
-        
-        console.log('Язык переключён на:', lang);
+    });
+    
+    // Обновляем текст с data-key
+    document.querySelectorAll('[data-key]').forEach(el => {
+        const key = el.dataset.key;
+        if (translations[lang][key]) {
+            el.textContent = translations[lang][key];
+        }
+    });
+    
+    // Заголовок и подзаголовок
+    const h1 = document.querySelector('.site-header h1');
+    const p = document.querySelector('.site-header .subtitle');
+    if (h1) h1.textContent = translations[lang].title;
+    if (p) p.textContent = translations[lang].subtitle;
+    
+    // Поля ввода
+    const topicInput = document.getElementById('topic-input');
+    if (topicInput) topicInput.placeholder = translations[lang].topic_placeholder;
+    
+    const detailsInput = document.getElementById('details-input');
+    if (detailsInput) detailsInput.placeholder = translations[lang].details_placeholder;
+    
+    // ===== НОВЫЕ ЭЛЕМЕНТЫ ДЛЯ ПЕРЕВОДА =====
+    
+    // Заголовки блоков примеров
+    const examplesLabel = document.querySelector('#examples-group > label');
+    if (examplesLabel) examplesLabel.textContent = translations[lang].examples_label;
+    
+    const examplesHint = document.querySelector('#examples-group .hint');
+    if (examplesHint) examplesHint.textContent = translations[lang].examples_hint;
+    
+    // Заголовки блока деталей
+    const detailsLabel = document.querySelector('#details-group > label');
+    if (detailsLabel) {
+        // Сохраняем span с текстом "(необязательно)" если есть
+        const span = detailsLabel.querySelector('span');
+        if (span) {
+            detailsLabel.childNodes[0].textContent = translations[lang].details_label + ' ';
+        } else {
+            detailsLabel.textContent = translations[lang].details_label;
+        }
+    }
+    
+    const detailsHint = document.querySelector('#details-group .hint');
+    if (detailsHint) detailsHint.textContent = translations[lang].details_hint;
+    
+    // Подписи полей выбора
+    const formatLabel = document.querySelector('.form-group label[for="format-select"]');
+    if (formatLabel) formatLabel.textContent = translations[lang].format_label;
+    
+    const styleLabel = document.querySelector('.form-group label[for="style-select"]');
+    if (styleLabel) styleLabel.textContent = translations[lang].style_label;
+    
+    // Заголовок логов
+    const logsTitle = document.querySelector('.logs-header h3');
+    if (logsTitle) logsTitle.textContent = translations[lang].logs_title;
+    
+    // Заголовок истории
+    const historyTitle = document.querySelector('.history-header h3');
+    if (historyTitle) historyTitle.textContent = translations[lang].history_title;
+    
+    const historyClear = document.getElementById('clear-history-btn');
+    if (historyClear) historyClear.textContent = translations[lang].history_clear;
+    
+    const historyEmpty = document.querySelector('.history-empty');
+    if (historyEmpty) historyEmpty.textContent = translations[lang].history_empty;
+    
+    // Стили в выпадающем списке
+    const styleSelect = document.getElementById('style-select');
+    if (styleSelect) {
+        const options = styleSelect.options;
+        if (options[0]) options[0].text = translations[lang].neutral;
+        if (options[1]) options[1].text = translations[lang].expert;
+        if (options[2]) options[2].text = translations[lang].friendly;
+        if (options[3]) options[3].text = translations[lang].emotional;
+    }
+    
+    // ===== КОНЕЦ НОВЫХ ЭЛЕМЕНТОВ =====
+    
+    // Кнопки
+    const generateBtn = document.getElementById('submit-btn');
+    if (generateBtn) {
+        const btnText = generateBtn.querySelector('#btn-text');
+        if (btnText) btnText.textContent = translations[lang].generate_btn;
+    }
+    
+    console.log('Язык переключён на:', lang);
+}
     }
     
     // Навешиваем обработчики
