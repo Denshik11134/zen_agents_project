@@ -151,9 +151,16 @@ img {
   margin: 0 auto;
   padding: 0.6rem 1rem;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: center;
   gap: 1.5rem;
   flex-wrap: wrap;
+}
+
+.site-nav .logo {
+  font-weight: 700;
+  font-size: 20px;
+  color: #2563eb;
 }
 
 .site-nav a {
@@ -838,8 +845,9 @@ img {
 .mobile-nav {
     display: none;
     position: relative;
-    justify-content: flex-end;
-    padding-right: 15px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
 }
 
 .hamburger {

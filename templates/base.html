@@ -42,25 +42,25 @@
 </head>
 <body>
 
-<!-- ── Header ── -->
-<header class="site-header">
-    <h1>📝 Генератор статей</h1>
-    <p class="subtitle">Создание качественных текстов с помощью искусственного интеллекта</p>
-</header>
-
 <!-- Десктопное меню (видно на компьютере) -->
 <nav class="site-nav desktop-nav">
     <div class="nav-inner">
+        <div class="logo">Neirostat</div>
         <a href="{{ url_for('index') }}" class="{% if request.path == '/' %}active{% endif %}">Главная</a>
         <a href="{{ url_for('about') }}" class="{% if request.path == '/about' %}active{% endif %}">О проекте</a>
         <a href="{{ url_for('contacts') }}" class="{% if request.path == '/contacts' %}active{% endif %}">Контакты</a>
         <a href="{{ url_for('privacy') }}" class="{% if request.path == '/privacy' %}active{% endif %}">Конфиденциальность</a>
         <a href="{{ url_for('terms') }}" class="{% if request.path == '/terms' %}active{% endif %}">Условия</a>
+        <div class="lang-switcher">
+            <button class="lang-btn" data-lang="ru">🇷🇺 RU</button>
+            <button class="lang-btn" data-lang="en">🇬🇧 EN</button>
+        </div>
     </div>
 </nav>
 
 <!-- Мобильное меню (гамбургер) -->
 <div class="mobile-nav">
+    <div class="logo">Neirostat</div>
     <button class="hamburger" id="hamburger-btn" onclick="var m=document.getElementById('mobile-menu'); m.style.display = m.style.display === 'flex' ? 'none' : 'flex'">☰</button>
     <div class="mobile-menu" id="mobile-menu">
         <a href="{{ url_for('index') }}">Главная</a>
