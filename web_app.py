@@ -91,6 +91,10 @@ def index():
     """Главная страница с формой."""
     return render_template("index.html")
 
+@app.route('/landing')
+def landing():
+    return render_template('landing.html')
+
 @app.route("/privacy")
 def privacy():
     """Политика конфиденциальности."""
@@ -189,4 +193,3 @@ if __name__ == "__main__":
     print("=" * 50)
     print()
     app.run(host="0.0.0.0", port=5000, debug=False, threaded=True)
-

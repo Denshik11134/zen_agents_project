@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Neirostat — Создавай контент в 2 клика{% endblock %}
+
+{% block content %}
+<main class="landing-hero">
+    <div class="landing-hero-inner">
+        <div class="landing-hero-content">
+            <h1 class="landing-title">Создавай контент в 2 клика с Neirostat</h1>
+            <p class="landing-subtitle">Бесплатный AI-генератор статей, постов, тредов, сценариев и рекламы</p>
+            <a class="landing-cta" href="{{ url_for('index') }}">Начать бесплатно →</a>
+        </div>
+
+        <div class="landing-hero-visual" aria-hidden="true">
+            <div class="landing-illustration"></div>
+        </div>
+    </div>
+</main>
+{% endblock %}
+
