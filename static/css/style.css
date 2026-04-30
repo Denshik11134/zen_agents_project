@@ -843,11 +843,10 @@ img {
 
 .mobile-nav {
     display: none;
-    position: relative;
-    display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0.75rem 1rem;
+    background: transparent;
 }
 
 .hamburger {
@@ -858,26 +857,34 @@ img {
     border: none;
     font-size: 28px;
     cursor: pointer;
+    backdrop-filter: blur(4px);
 }
 
 .mobile-menu {
-    width: 50%;
-    right: 0;
-    background: white;
-    border-radius: 16px 0 0 16px;
+    display: none;
     position: fixed;
     top: 70px;
-    display: none;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    right: 0;
+    width: 50%;
+    background: white;
     flex-direction: column;
-    z-index: 1000;
+    padding: 1.5rem;
+    gap: 1rem;
+    z-index: 2000;
+    border-radius: 16px 0 0 16px;
+    box-shadow: -4px 8px 20px rgba(0,0,0,0.15);
+}
+
+.mobile-menu.show {
+    display: flex;
 }
 
 .mobile-menu a {
-    padding: 12px 20px;
+    color: #1e293b;
+    font-size: 1.2rem;
     text-decoration: none;
-    color: var(--color-text);
-    border-bottom: 1px solid #f0f0f0;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #e2e8f0;
 }
 
 .mobile-menu a:last-child {
@@ -885,7 +892,7 @@ img {
 }
 
 .mobile-menu a:hover {
-    background: #f5f5f5;
+    opacity: 0.85;
 }
 
 /* Адаптация для телефонов */
@@ -894,14 +901,6 @@ img {
         display: none !important;
     }
     .mobile-nav {
-        display: block !important;
-        text-align: right;
-    }
-    .mobile-menu {
-        right: 0;
-        left: auto;
-    }
-    .mobile-menu.show {
         display: flex !important;
     }
 }

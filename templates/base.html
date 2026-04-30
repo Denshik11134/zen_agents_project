@@ -59,9 +59,9 @@
 </nav>
 
 <!-- Мобильное меню (гамбургер) -->
-<div class="mobile-nav" style="display: flex; justify-content: space-between;">
+<div class="mobile-nav">
     <div class="logo">Neirostat</div>
-    <button class="hamburger" id="hamburger-btn" onclick="var m=document.getElementById('mobile-menu'); m.style.display = m.style.display === 'flex' ? 'none' : 'flex'">☰</button>
+    <button class="hamburger" id="hamburger-btn" type="button" aria-label="Открыть меню" aria-controls="mobile-menu" aria-expanded="false">☰</button>
     <div class="mobile-menu" id="mobile-menu">
         <a href="{{ url_for('index') }}">Главная</a>
         <a href="{{ url_for('about') }}">О проекте</a>
@@ -94,15 +94,17 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!menu || !hamburger) return;
 
     function isMenuOpen() {
-        return menu.style.display === 'flex';
+        return menu.classList.contains('show');
     }
 
     function openMenu() {
-        menu.style.display = 'flex';
+        menu.classList.add('show');
+        hamburger.setAttribute('aria-expanded', 'true');
     }
 
     function closeMenu() {
-        menu.style.display = 'none';
+        menu.classList.remove('show');
+        hamburger.setAttribute('aria-expanded', 'false');
     }
 
     function toggleMenu() {
@@ -120,6 +122,10 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!isMenuOpen()) return;
         if (menu.contains(e.target) || hamburger.contains(e.target)) return;
         closeMenu();
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && isMenuOpen()) closeMenu();
     });
 });
 </script>
