@@ -851,28 +851,26 @@ img {
 }
 
 .hamburger {
-    background: none;
+    background: rgba(0,0,0,0.4);
+    border-radius: 12px;
+    color: white;
+    padding: 8px 14px;
     border: none;
     font-size: 28px;
     cursor: pointer;
-    padding: 8px 12px;
-    color: var(--color-text);
 }
 
 .mobile-menu {
-    display: none;
-    position: absolute;
-    top: 100%;
+    width: 50%;
     right: 0;
-    left: auto;
     background: white;
-    border: 1px solid #ddd;
-    border-radius: 12px;
+    border-radius: 16px 0 0 16px;
+    position: fixed;
+    top: 70px;
+    display: none;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     flex-direction: column;
-    min-width: 180px;
     z-index: 1000;
-    margin-top: 8px;
 }
 
 .mobile-menu a {
