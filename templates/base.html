@@ -88,17 +88,39 @@
 
 {% block extra_scripts %}
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     var menu = document.getElementById('mobile-menu');
     var hamburger = document.getElementById('hamburger-btn');
-    function closeMenu(e) {
-        if (menu && hamburger && menu.style.display === 'flex') {
-            if (!menu.contains(e.target) && !hamburger.contains(e.target)) {
-                menu.style.display = 'none';
-            }
-        }
+    if (!menu || !hamburger) return;
+
+    function isMenuOpen() {
+        return menu.style.display === 'flex';
     }
-    document.addEventListener('click', closeMenu);
+
+    function openMenu() {
+        menu.style.display = 'flex';
+    }
+
+    function closeMenu() {
+        menu.style.display = 'none';
+    }
+
+    function toggleMenu() {
+        if (isMenuOpen()) closeMenu();
+        else openMenu();
+    }
+
+    hamburger.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        toggleMenu();
+    });
+
+    document.addEventListener('click', function (e) {
+        if (!isMenuOpen()) return;
+        if (menu.contains(e.target) || hamburger.contains(e.target)) return;
+        closeMenu();
+    });
 });
 </script>
 {% endblock %}
