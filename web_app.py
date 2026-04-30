@@ -88,12 +88,13 @@ def _generate_article_job(job_id: str, user_topic: str | None, user_format: str 
 
 @app.route("/")
 def index():
-    """Главная страница с формой."""
-    return render_template("index.html")
+    """Главная страница (лендинг)."""
+    return render_template("landing.html")
 
-@app.route('/landing')
-def landing():
-    return render_template('landing.html')
+@app.route("/app")
+def app_generator():
+    """Страница генератора статей."""
+    return render_template("index.html")
 
 @app.route("/privacy")
 def privacy():

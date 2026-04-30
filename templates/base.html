@@ -45,8 +45,9 @@
 <!-- Десктопное меню (видно на компьютере) -->
 <nav class="site-nav desktop-nav">
     <div class="nav-inner">
-        <div class="logo">Neirostat</div>
+        <a class="logo" href="{{ url_for('index') }}">Neirostat</a>
         <a href="{{ url_for('index') }}" class="{% if request.path == '/' %}active{% endif %}">Главная</a>
+        <a href="{{ url_for('app_generator') }}" class="{% if request.path == '/app' %}active{% endif %}">Генератор</a>
         <a href="{{ url_for('about') }}" class="{% if request.path == '/about' %}active{% endif %}">О проекте</a>
         <a href="{{ url_for('contacts') }}" class="{% if request.path == '/contacts' %}active{% endif %}">Контакты</a>
         <a href="{{ url_for('privacy') }}" class="{% if request.path == '/privacy' %}active{% endif %}">Конфиденциальность</a>
@@ -60,7 +61,27 @@
 
 <!-- Мобильное меню (гамбургер) -->
 <div class="mobile-nav">
-    <div class="logo">Neirostat</div>
+    <a class="logo" href="{{ url_for('index') }}">Neirostat</a>
+    <button class="hamburger" id="hamburger-btn" type="button" aria-label="Открыть меню" aria-controls="mobile-menu" aria-expanded="false">☰</button>
+    <div class="mobile-menu" id="mobile-menu">
+        <a href="{{ url_for('index') }}">Главная</a>
+        <a href="{{ url_for('app_generator') }}">Генератор</a>
+        <a href="{{ url_for('about') }}">О проекте</a>
+        <a href="{{ url_for('contacts') }}">Контакты</a>
+        <a href="{{ url_for('privacy') }}">Конфиденциальность</a>
+        <a href="{{ url_for('terms') }}">Условия</a>
+        <div class="lang-switcher-mobile">
+            <button class="lang-btn" data-lang="ru">🇷🇺 RU</button>
+            <button class="lang-btn" data-lang="en">🇬🇧 EN</button>
+        </div>
+    </div>
+</div>
+    </div>
+</nav>
+
+<!-- Мобильное меню (гамбургер) -->
+<div class="mobile-nav">
+    <a class="logo" href="{{ url_for('index') }}">Neirostat</a>
     <button class="hamburger" id="hamburger-btn" type="button" aria-label="Открыть меню" aria-controls="mobile-menu" aria-expanded="false">☰</button>
     <div class="mobile-menu" id="mobile-menu">
         <a href="{{ url_for('index') }}">Главная</a>

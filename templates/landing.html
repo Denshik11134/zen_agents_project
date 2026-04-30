@@ -7,8 +7,8 @@
     <div class="landing-hero-inner">
         <div class="landing-hero-content">
             <h1 class="landing-title">Создавай контент в 2 клика с Neirostat</h1>
-            <p class="landing-subtitle">Бесплатный AI-генератор статей, постов, тредов, сценариев и рекламы</p>
-            <a class="landing-cta" href="{{ url_for('index') }}">Начать бесплатно →</a>
+            <p class="landing-subtitle">Бесплатный AI-генератор статей, постов, тредов, сценариев и рекламы для Яндекс.Дзен, соцсетей и блогов</p>
+            <a class="landing-cta" href="{{ url_for('app_generator') }}">Начать бесплатно →</a>
         </div>
 
         <div class="landing-hero-visual" aria-hidden="true">
@@ -16,5 +16,90 @@
         </div>
     </div>
 </main>
+
+<section class="landing-features">
+    <div class="features-container">
+        <h2 class="features-title">Почему Neirostat?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">📄</div>
+                <h3>5 форматов контента</h3>
+                <p>Статьи, посты, треды, сценарии и рекламные тексты</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎨</div>
+                <h3>4 стиля текста</h3>
+                <p>Нейтральный, экспертный, дружелюбный, эмоциональный</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Мгновенная генерация</h3>
+                <p>Готовый текст за секунды без ожидания</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔓</div>
+                <h3>Без регистрации</h3>
+                <p>Начинайте создавать прямо сейчас, не вводя данных</p>
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock %}
 
+{% block extra_scripts %}
+<style>
+.landing-features {
+    padding: 3rem 1rem;
+    background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+}
+.features-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+.features-title {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin-bottom: 2.5rem;
+}
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+}
+.feature-card {
+    background: rgba(30, 41, 59, 0.7);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    padding: 1.5rem;
+    text-align: center;
+    border: 1px solid rgba(71, 85, 105, 0.5);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+.feature-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+}
+.feature-card h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-bottom: 0.5rem;
+}
+.feature-card p {
+    color: #cbd5e1;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+@media (max-width: 768px) {
+    .features-title { font-size: 1.5rem; }
+    .feature-icon { font-size: 2rem; }
+    .feature-card { padding: 1.2rem; }
+}
+</style>
+{% endblock %}
