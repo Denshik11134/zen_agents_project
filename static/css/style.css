@@ -858,6 +858,8 @@ img {
     font-size: 28px;
     cursor: pointer;
     backdrop-filter: blur(4px);
+    position: relative;
+    z-index: 2100;
 }
 
 .mobile-menu {
@@ -865,7 +867,8 @@ img {
     position: fixed;
     top: 70px;
     right: 0;
-    width: 50%;
+    width: 58%;
+    max-width: 320px;
     background: white;
     flex-direction: column;
     padding: 1.5rem;
