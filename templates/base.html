@@ -78,22 +78,6 @@
         </div>
     </div>
 </div>
-    </div>
-</nav>
-
-<!-- Мобильное меню (гамбургер) -->
-<div class="mobile-nav">
-    <a class="logo" href="{{ url_for('index') }}">Neirostat</a>
-    <button class="hamburger" id="hamburger-btn" type="button" aria-label="Открыть меню" aria-controls="mobile-menu" aria-expanded="false">☰</button>
-    <div class="mobile-menu" id="mobile-menu">
-        <button class="menu-close" id="menu-close" type="button" aria-label="Закрыть меню">✕</button>
-        <a href="{{ url_for('index') }}">Главная</a>
-        <a href="{{ url_for('about') }}">О проекте</a>
-        <a href="{{ url_for('contacts') }}">Контакты</a>
-        <a href="{{ url_for('privacy') }}">Конфиденциальность</a>
-        <a href="{{ url_for('terms') }}">Условия</a>
-    </div>
-</div>
 
 {% block content %}{% endblock %}
 
