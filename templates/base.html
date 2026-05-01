@@ -62,20 +62,15 @@
 
 <!-- Мобильное меню (гамбургер) -->
 <div class="mobile-nav">
-    <a class="logo" href="{{ url_for('index') }}">Neirostat</a>
-    <button class="hamburger" id="hamburger-btn" type="button" aria-label="Открыть меню" aria-controls="mobile-menu" aria-expanded="false">☰</button>
+    <div class="logo">Neirostat</div>
+    <button class="hamburger" id="hamburger-btn" onclick="document.getElementById('mobile-menu').style.display = 'flex'">☰</button>
     <div class="mobile-menu" id="mobile-menu">
-        <button class="menu-close" id="menu-close" type="button" aria-label="Закрыть меню">✕</button>
+        <button class="menu-close" onclick="document.getElementById('mobile-menu').style.display = 'none'">✕</button>
         <a href="{{ url_for('index') }}">Главная</a>
-        <a href="{{ url_for('app_generator') }}">Генератор</a>
         <a href="{{ url_for('about') }}">О проекте</a>
         <a href="{{ url_for('contacts') }}">Контакты</a>
         <a href="{{ url_for('privacy') }}">Конфиденциальность</a>
         <a href="{{ url_for('terms') }}">Условия</a>
-        <div class="lang-switcher-mobile">
-            <button class="lang-btn" data-lang="ru">🇷🇺 RU</button>
-            <button class="lang-btn" data-lang="en">🇬🇧 EN</button>
-        </div>
     </div>
 </div>
 
@@ -147,5 +142,17 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 {% endblock %}
+<script>
+    // Закрытие меню при клике вне его
+    document.addEventListener('click', function(event) {
+        const menu = document.getElementById('mobile-menu');
+        const btn = document.getElementById('hamburger-btn');
+        if (menu && btn && menu.style.display === 'flex') {
+            if (!menu.contains(event.target) && !btn.contains(event.target)) {
+                menu.style.display = 'none';
+            }
+        }
+    });
+</script>
 </body>
 </html>
