@@ -1055,3 +1055,13 @@ img {
         font-size: 1.85rem;
     }
 }
+/* Принудительный тёмный текст для всех страниц */
+body, .card, .form-group label, .hint, .btn-example, .history-item, .history-empty, .result-meta h3, #article-editor, .footer-links a, .footer-copyright {
+    color: #1e293b !important;
+}
+
+/* Если блоки на тёмном фоне — сделаем фон светлым */
+.card, .content-card {
+    background: #ffffff !important;
+    color: #1e293b !important;
+}
