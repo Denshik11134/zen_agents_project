@@ -64,6 +64,7 @@
     <a class="logo" href="{{ url_for('index') }}">Neirostat</a>
     <button class="hamburger" id="hamburger-btn" type="button" aria-label="Открыть меню" aria-controls="mobile-menu" aria-expanded="false">☰</button>
     <div class="mobile-menu" id="mobile-menu">
+        <button class="menu-close" id="menu-close" type="button" aria-label="Закрыть меню">✕</button>
         <a href="{{ url_for('index') }}">Главная</a>
         <a href="{{ url_for('app_generator') }}">Генератор</a>
         <a href="{{ url_for('about') }}">О проекте</a>
@@ -84,6 +85,7 @@
     <a class="logo" href="{{ url_for('index') }}">Neirostat</a>
     <button class="hamburger" id="hamburger-btn" type="button" aria-label="Открыть меню" aria-controls="mobile-menu" aria-expanded="false">☰</button>
     <div class="mobile-menu" id="mobile-menu">
+        <button class="menu-close" id="menu-close" type="button" aria-label="Закрыть меню">✕</button>
         <a href="{{ url_for('index') }}">Главная</a>
         <a href="{{ url_for('about') }}">О проекте</a>
         <a href="{{ url_for('contacts') }}">Контакты</a>
@@ -112,6 +114,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     var menu = document.getElementById('mobile-menu');
     var hamburger = document.getElementById('hamburger-btn');
+    var menuClose = document.getElementById('menu-close');
     if (!menu || !hamburger) return;
 
     function isMenuOpen() {
@@ -138,6 +141,14 @@ document.addEventListener('DOMContentLoaded', function () {
         e.stopPropagation();
         toggleMenu();
     });
+
+    if (menuClose) {
+        menuClose.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            closeMenu();
+        });
+    }
 
     document.addEventListener('click', function (e) {
         if (!isMenuOpen()) return;
