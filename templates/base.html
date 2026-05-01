@@ -142,5 +142,30 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 {% endblock %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const hamburger = document.getElementById('hamburger-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const closeBtn = document.querySelector('.menu-close');
+        
+        function openMenu() {
+            if (mobileMenu) mobileMenu.style.display = 'flex';
+        }
+        function closeMenu() {
+            if (mobileMenu) mobileMenu.style.display = 'none';
+        }
+        
+        if (hamburger) hamburger.addEventListener('click', openMenu);
+        if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+        
+        document.addEventListener('click', function(e) {
+            if (mobileMenu && hamburger && mobileMenu.style.display === 'flex') {
+                if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+                    closeMenu();
+                }
+            }
+        });
+    });
+</script>
 </body>
 </html>
