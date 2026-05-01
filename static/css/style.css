@@ -876,6 +876,53 @@ img {
 }
 
 /* Мобильное меню — финальная версия */
+.mobile-menu {
+    display: none;
+    position: fixed;
+    top: 70px;
+    right: 0;
+    width: 55%;
+    height: 55vh;
+    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+    flex-direction: column;
+    padding: 1.5rem;
+    gap: 1rem;
+    z-index: 2000;
+    border-radius: 16px 0 0 16px;
+    box-shadow: -4px 8px 20px rgba(0,0,0,0.15);
+}
+
+.mobile-menu.show {
+    display: flex;
+}
+
+.mobile-menu a {
+    color: #1e293b;
+    font-size: 1.2rem;
+    text-decoration: none;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.mobile-menu a:last-child {
+    border-bottom: none;
+}
+
+.mobile-menu a:hover {
+    opacity: 0.85;
+}
+
+.menu-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: #1e293b;
+    padding: 5px 10px;
+}
 
 /* Адаптация для телефонов */
 @media (max-width: 768px) {
