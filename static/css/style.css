@@ -881,52 +881,46 @@ img {
     position: fixed;
     top: 70px;
     right: 0;
-    width: 55%;
-    background: white;
+    width: 70%;
+    background: linear-gradient(to left, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
+    backdrop-filter: blur(2px);
     flex-direction: column;
     padding: 1.5rem;
     gap: 1rem;
     z-index: 2000;
     border-radius: 16px 0 0 16px;
-    box-shadow: -4px 8px 20px rgba(0,0,0,0.15);
+    box-shadow: -4px 8px 20px rgba(0,0,0,0.1);
     animation: slideIn 0.3s ease-out;
 }
 
-/* Анимация выезда */
 @keyframes slideIn {
     from { transform: translateX(100%); opacity: 0; }
     to { transform: translateX(0); opacity: 1; }
 }
 
-/* Кнопка закрытия */
-.menu-close {
-    background: none;
-    border: none;
-    font-size: 24px;
-    font-weight: bold;
-    text-align: right;
-    cursor: pointer;
-    color: #333;
-    margin-bottom: 10px;
-}
-
-/* Ссылки в меню */
 .mobile-menu a {
     display: block;
     padding: 12px 0;
-    color: #1e293b;
+    color: #1e293b !important;
     text-decoration: none;
     font-size: 1.2rem;
-    border-bottom: 1px solid #e2e8f0;
-    transition: background 0.2s;
-}
-
-.mobile-menu a:hover {
-    background-color: #f1f5f9;
+    font-weight: 500;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
 }
 
 .mobile-menu a:last-child {
     border-bottom: none;
+}
+
+.menu-close {
+    background: none;
+    border: none;
+    font-size: 28px;
+    font-weight: bold;
+    text-align: right;
+    cursor: pointer;
+    color: #1e293b;
+    margin-bottom: 10px;
 }
 
 /* Адаптация для телефонов */
