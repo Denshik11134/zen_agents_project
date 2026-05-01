@@ -875,6 +875,7 @@ img {
     z-index: 2100;
 }
 
+/* Мобильное меню — финальная версия */
 .mobile-menu {
     display: none;
     position: fixed;
@@ -882,14 +883,22 @@ img {
     right: 0;
     width: 55%;
     background: white;
-    padding: 1rem;
-    border-radius: 12px;
-    box-shadow: -4px 8px 20px rgba(0,0,0,0.1);
-    z-index: 1000;
     flex-direction: column;
-    gap: 0.5rem;
+    padding: 1.5rem;
+    gap: 1rem;
+    z-index: 2000;
+    border-radius: 16px 0 0 16px;
+    box-shadow: -4px 8px 20px rgba(0,0,0,0.15);
+    animation: slideIn 0.3s ease-out;
 }
 
+/* Анимация выезда */
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+/* Кнопка закрытия */
 .menu-close {
     background: none;
     border: none;
@@ -901,12 +910,19 @@ img {
     margin-bottom: 10px;
 }
 
+/* Ссылки в меню */
 .mobile-menu a {
     display: block;
-    padding: 10px;
+    padding: 12px 0;
     color: #1e293b;
     text-decoration: none;
-    border-bottom: 1px solid #eee;
+    font-size: 1.2rem;
+    border-bottom: 1px solid #e2e8f0;
+    transition: background 0.2s;
+}
+
+.mobile-menu a:hover {
+    background-color: #f1f5f9;
 }
 
 .mobile-menu a:last-child {
