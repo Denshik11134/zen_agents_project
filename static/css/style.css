@@ -883,7 +883,7 @@ img {
     right: 0;
     width: 55%;
     max-height: 60vh;
-    background: linear-gradient(to left, rgba(255,255,255,0) 0%, white 100%);
+    background: white;
     flex-direction: column;
     padding: 1.5rem;
     gap: 1rem;
