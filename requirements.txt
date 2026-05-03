@@ -6,3 +6,5 @@ ollama
 flask
 openai
 gunicorn
+aiogram
+httpx
