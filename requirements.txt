@@ -8,3 +8,5 @@ openai
 gunicorn
 aiogram
 httpx
+aiohttp
+pydantic
