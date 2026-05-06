@@ -9,7 +9,6 @@ from aiohttp import web
 import httpx
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command
-from aiogram.client.aiohttp import AiohttpSession
 
 # ============ ЛОГИРОВАНИЕ ============
 logging.basicConfig(
@@ -395,10 +394,7 @@ async def main():
     http_client = httpx.AsyncClient(timeout=60.0)
     log.info("HTTP client initialized")
 
-    session = AiohttpSession() if os.getenv("PROXY") else None
-    if session:
-        session = AiohttpSession(proxy=os.getenv("PROXY"))
-    bot = Bot(token=TELEGRAM_TOKEN, session=session)
+    bot = Bot(token=TELEGRAM_TOKEN)
     dp = Dispatcher()
 
     # Регистрация команд
