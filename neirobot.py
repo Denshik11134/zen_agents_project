@@ -373,10 +373,9 @@ async def telegram_webhook(request):
 
 async def on_startup(app):
     bot = app["bot"]
-    webhook_url = os.getenv("WEBHOOK_URL")
-    if webhook_url:
-        await bot.set_webhook(f"{webhook_url}/webhook")
-        logging.info("Webhook set to: %s/webhook", webhook_url)
+    webhook_url = "https://amvera-neirostat-run-neirostat-bot.amvera.ru/webhook"
+    await bot.set_webhook(webhook_url)
+    logging.info("Webhook set to: %s", webhook_url)
 
 
 async def on_shutdown(app):
