@@ -1,3 +1,5 @@
+"use client";
+
 import { motion } from "framer-motion";
 import Head from "next/head";
 import { useState, type FormEvent } from "react";
@@ -38,12 +40,12 @@ const icons = {
 
 // ---------- Данные ----------
 const formatCards = [
-  { title: "Статьи", icon: icons.article },
-  { title: "Посты для соцсетей", icon: icons.post },
-  { title: "Треды для X (Twitter)", icon: icons.thread },
-  { title: "Сценарии видео", icon: icons.script },
-  { title: "Рекламные посты", icon: icons.ad },
-  { title: "Любой контент", icon: icons.content },
+  { title: "Статьи", icon: icons.article, desc: "Глубокие и структурированные тексты" },
+  { title: "Посты для соцсетей", icon: icons.post, desc: "Короткие и вовлекающие публикации" },
+  { title: "Треды для X (Twitter)", icon: icons.thread, desc: "Цепочки сообщений для обсуждений" },
+  { title: "Сценарии видео", icon: icons.script, desc: "Готовые сценарии для YouTube, TikTok" },
+  { title: "Рекламные посты", icon: icons.ad, desc: "Продающие тексты для кампаний" },
+  { title: "Любой контент", icon: icons.content, desc: "С выбором стиля: нейтральный, экспертный, дружеский, эмоциональный" },
 ];
 
 const steps = [
@@ -54,8 +56,8 @@ const steps = [
   },
   {
     number: "02",
-    title: "Опиши тему",
-    desc: "Напиши ключевые слова или краткое описание того, что нужно сгенерировать.",
+    title: "Опиши тему и стиль",
+    desc: "Напиши ключевые слова и выбери стиль: нейтральный, экспертный, дружеский или эмоциональный.",
   },
   {
     number: "03",
@@ -130,11 +132,11 @@ const Hero = () => (
       transition={{ duration: 0.8, ease: "easeOut" }}
     >
       <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight bg-gradient-to-r from-cyan-300 via-purple-300 to-pink-300 bg-clip-text text-transparent">
-        Создавай контент с&nbsp;помощью&nbsp;AI
+        Генератор контента на базе ИИ
       </h1>
-      <p className="mt-6 text-lg sm:text-xl text-gray-300 max-w-xl mx-auto">
-        neirostat.ru — генератор статей, постов, тредов, сценариев и рекламы. 
-        Бесплатно и без регистрации.
+      <p className="mt-6 text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto">
+        Создавай статьи, посты, треды, сценарии и рекламу за секунды.
+        Выбирай стиль: нейтральный, экспертный, дружеский, эмоциональный.
       </p>
       <motion.a
         href="#formats"
@@ -142,7 +144,7 @@ const Hero = () => (
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
-        Начать бесплатно
+        Попробовать бесплатно
       </motion.a>
     </motion.div>
 
@@ -162,7 +164,7 @@ const Formats = () => (
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
     >
-      Форматы контента
+      Что умеет сервис
     </motion.h2>
 
     <motion.div
@@ -182,6 +184,7 @@ const Formats = () => (
         >
           <div className="mb-4">{card.icon}</div>
           <h3 className="text-xl font-semibold">{card.title}</h3>
+          <p className="mt-2 text-sm text-gray-400">{card.desc}</p>
           <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-cyan-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
         </motion.div>
       ))}
@@ -200,7 +203,7 @@ const HowItWorks = () => (
         viewport={{ once: true }}
         transition={{ duration: 0.5 }}
       >
-        Как это работает
+        Как работает
       </motion.h2>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
