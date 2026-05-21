@@ -14,9 +14,9 @@
     --color-accent-dark: #059669;
     --color-bg: #f8f9fa;
     --color-surface: #ffffff;
-    --color-text: #f1f5f9;
-    --color-text-secondary: #cbd5e1;
-    --color-text-muted: #cbd5e1;
+    --color-text: #1e293b;
+    --color-text-secondary: #475569;
+    --color-text-muted: #64748b;
     --color-border: #dee2e6;
     --color-footer-bg: #e9ecef;
     --color-error: #dc3545;
@@ -53,10 +53,10 @@ html {
 }
 
 body {
-    background: linear-gradient(145deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+    background: linear-gradient(145deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%);
     position: relative;
     font-family: var(--font-sans);
-    color: #e2e8f0;
+    color: #1e293b;
     line-height: 1.6;
     min-height: 100vh;
     display: flex;
@@ -187,15 +187,15 @@ img {
 
 /* ── Card ── */
 .card {
-    background: rgba(30, 41, 59, 0.7);
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(12px);
     border-radius: 24px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     padding: 1.75rem;
     margin-bottom: 1.5rem;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: 1px solid rgba(71, 85, 105, 0.5);
-    color: #f1f5f9;
+    border: 1px solid rgba(203, 213, 225, 0.5);
+    color: #1e293b;
 }
 
 .card:hover {
@@ -218,12 +218,12 @@ img {
 .form-group input[type="text"] {
     width: 100%;
     padding: 0.75rem 1rem;
-    border: 2px solid #64748b;
+    border: 2px solid #cbd5e1;
     border-radius: var(--radius-sm);
     font-size: 1rem;
     font-family: var(--font-sans);
-    background: #1e293b;
-    color: #f1f5f9;
+    background: #ffffff;
+    color: #1e293b;
     transition: border-color var(--transition), box-shadow var(--transition);
 }
 
@@ -234,7 +234,7 @@ img {
 }
 
 .form-group input[type="text"]::placeholder {
-    color: #94a3b8;
+    color: #64748b;
 }
 
 .hint {
@@ -427,14 +427,14 @@ img {
     width: 100%;
     min-height: 400px;
     padding: 1.2rem;
-    border: 2px solid #64748b;
+    border: 2px solid #cbd5e1;
     border-radius: var(--radius-sm);
     font-family: var(--font-mono);
     font-size: 0.9rem;
     line-height: 1.7;
     resize: vertical;
-    background: #1e293b;
-    color: #f1f5f9;
+    background: #ffffff;
+    color: #1e293b;
     white-space: pre-wrap;
     word-break: break-word;
     transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
@@ -444,7 +444,7 @@ img {
     outline: none;
     border-color: var(--color-primary);
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
-    background: #1e293b;
+    background: #ffffff;
 }
 
 .action-buttons {
@@ -517,14 +517,14 @@ img {
 }
 
 .content-page h1, .content-page h2 {
-    color: #ffffff;
+    color: #1e293b;
 }
 .content-page p, .content-page li, .content-card {
-    color: #f1f5f9;
+    color: #374151;
 }
 .content-card {
-    background: rgba(30, 41, 59, 0.7);
-    border: 1px solid rgba(71, 85, 105, 0.5);
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(203, 213, 225, 0.5);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-md);
 }
@@ -995,12 +995,12 @@ img {
     line-height: 1.15;
     letter-spacing: -0.02em;
     margin-bottom: 1rem;
-    color: #f1f5f9;
+    color: #1e293b;
 }
 
 .landing-subtitle {
     font-size: 1.05rem;
-    color: #cbd5e1;
+    color: #475569;
     margin-bottom: 1.5rem;
 }
 
@@ -1055,13 +1055,13 @@ img {
         font-size: 1.85rem;
     }
 }
-/* Принудительный тёмный текст для всех страниц */
+/* Обеспечиваем хороший контраст для всех элементов */
 body, .card, .form-group label, .hint, .btn-example, .history-item, .history-empty, .result-meta h3, #article-editor, .footer-links a, .footer-copyright {
-    color: #1e293b !important;
+    color: #1e293b;
 }
 
-/* Если блоки на тёмном фоне — сделаем фон светлым */
+/* Светлый фон для карточек */
 .card, .content-card {
-    background: #ffffff !important;
-    color: #1e293b !important;
+    background: #ffffff;
+    color: #1e293b;
 }
